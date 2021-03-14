@@ -15,6 +15,8 @@ public class Exchange {
     public static void main(String[] args) {
         int[] nums = {1, 2, 3, 4};
         System.out.println(Arrays.toString(exchange(nums)));
+        System.out.println(Arrays.toString(exchange2(nums)));
+
     }
 
     /**
@@ -41,4 +43,58 @@ public class Exchange {
         return exchangeNums;
     }
 
+    /**
+     * 双指针交换：一头一尾指针指向原数组，头指针为奇数时右移，尾指针为偶数时左移，找到第一个不满足条件的两个值交换，然后继续循环。
+     * @author PAN
+     * @param nums 待调整的数组
+     * @return 按奇偶调整后的数组
+     * @time O(N)
+     * @space O(1)
+     */
+    public static int[] exchange2(int[] nums) {
+        int i = 0, j = nums.length - 1;
+        int tmp;
+        while (i < j) {
+            boolean flagI = (nums[i] % 2 == 0);
+            boolean flagJ = (nums[j] % 2 == 1);
+            if (flagI && flagJ) {
+                tmp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = tmp;
+                i++;
+                j--;
+            } else {
+                if (!flagI) i++;
+                if (!flagJ) j--;
+            }
+        }
+        return nums;
+    }
+
+    /**
+     * 双指针交换2
+     * @author 网友
+     * @param nums 待调整的数组
+     * @return 按奇偶调整后的数组
+     * @time O(N)
+     * @space O(1)
+     */
+    public int[] exchange3(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+        while (left < right) {
+            while (left < right && nums[left] % 2 != 0) {
+                left++;
+            }
+            while (left < right && nums[right] % 2 == 0) {
+                right--;
+            }
+            if (left < right) {
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+            }
+        }
+        return nums;
+    }
 }
