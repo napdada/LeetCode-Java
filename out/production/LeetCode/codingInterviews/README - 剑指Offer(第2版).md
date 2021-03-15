@@ -2,6 +2,20 @@
 [TOC]
  **注O(N) O(N)：先时间复杂度，再空间复杂度，全文如此。**
 
+## A1. 动态规划DP
+
+1. 状态定义
+2. 转移方程
+3. 初始化
+4. 返回值
+
+## A2. 递归
+
+1. 递推参数
+2. 终止条件
+3. 递推工作
+4. 返回值
+
 ## Q3. 数组中重复的数字：遍历计数、排序找重、**原地交换**
 
 ​	在一个长度为 n 的数组 nums 里的所有数字都在 0～n-1 的范围内。数组中某些数字是重复的，但不知道有几个数字重复了，也不知道每个数字重复了几次。请找出数组中任意一个重复的数字。
@@ -20,7 +34,7 @@
 
 3. **原地交换** - 遍历中，第一次遇到数字 xx 时，将其交换至索引 xx 处，而当第二次遇到数字 xx 时，一定有 nums[x] = x，此时即可得到一组重复数字。
 
-   ![原地交换](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/原地交换.png)
+   ![原地交换](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/原地交换.png)
 
 ## Q4. 二维数组中的查找：暴力求解、**类二叉查找树**
 
@@ -49,7 +63,7 @@
 
 2. **类二叉查找树 O(N + M)** - 将矩阵逆时针旋转 45° ，并将其转化为图形式，发现其类似于二叉搜索树，即对于每个元素，其左分支元素更小、右分支元素更大。从二维数组右上角元素开始与 target 比较，target 大则向下比较， target 小则向左比较。
 
-   ![类二叉搜索树](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/类二叉搜索树.png)
+   ![类二叉搜索树](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/类二叉搜索树.png)
 
 ## Q5. 替换空格：遍历替换、**原地修改**
 
@@ -286,7 +300,7 @@
 
 1. **DFS + 剪枝 O(3^K*MN) O(K)**：
 
-   ![DFS+剪枝](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/DFS+剪枝.png)
+   ![DFS+剪枝](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/DFS+剪枝.png)
 
    1）DFS暴力遍历矩阵中所有字符串可能性，通过递归先朝一个方向搜到底，再回溯至上个节点，沿另一个方向搜索，以此类推；
 
@@ -349,7 +363,7 @@
 
    - **数位和增量公式：不需要每次都用整除和求余去计算位数和**
 
-     ![数位和增量公式](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/数位和增量公式.png)
+     ![数位和增量公式](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/数位和增量公式.png)
 
    - 可达解分析：**仅需向右、向下移动**
 
@@ -397,7 +411,7 @@
 
    - 求导也可以证明，同时可以求得驻点为e，即2.7左右，通过带入2、3可以得到绳子越多切分成长度3，乘积越大；
 
-     ![绳子切分](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/绳子切分.png)
+     ![绳子切分](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分.png)
 
    - 那么转换成以下算法：
 
@@ -407,11 +421,11 @@
 
 2. **贪心**
 
-   - ![绳子切分贪心](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/绳子切分贪心.png)
+   - ![绳子切分贪心](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分贪心.png)
 
 3. 动态规划 O(N^2) O(N)
 
-   - ![绳子切分动态规划](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/绳子切分动态规划.png)
+   - ![绳子切分动态规划](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分动态规划.png)
 
    - ```java
      class Solution {
@@ -454,7 +468,7 @@
 
 2. **快速求余 O(log2 N) O(1)**
 
-   - ![快速幂求余](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/快速幂求余.png)
+   - ![快速幂求余](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/快速幂求余.png)
 
    - ```java
      class Solution {
@@ -553,13 +567,13 @@
 
 2. 大数打印 O(10^N) O(10^N) - 题目给定了 int 范围，但实际情况可能会考大数，这时候用 int 无法解，需要用 String。
 
-   - ![大数递归打印](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/大数递归打印.png)
+   - ![大数递归打印](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/大数递归打印.png)
 
    - 主要处理两个问题：
 
      1. 删除高位多余的 0：
 
-        ![删除高位0](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/删除高位0.png)
+        ![删除高位0](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/删除高位0.png)
 
      2. 列表从 1 开始：添加字符串前判断是否为“0”，是则跳过。
 
@@ -585,7 +599,7 @@
 
 1. 遍历对比删除 O(N) O(1) - 从头节点开始依次比较，找到要删除的节点进行删除，即将上一个节点指向下一个节点。
 
-## Q19. 正则表达式匹配
+## Q19. 正则表达式匹配：**动态规划**
 
 ​	请实现一个函数用来匹配包含 . 和 * 的正则表达式。模式中的字符 . 表示任意一个字符，而 * 表示它前面的字符可以出现任意次（含0次）。在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab * ac * a"匹配，但与"aa.a"和"ab*a"均不匹配。
 
@@ -630,7 +644,81 @@ p = "mis*is*p*."
 输出: false
 ```
 
+解：
 
+1. **动态规划 O(NM) O(NM)**
+   - 总体思路：每轮添加一个字符并判断是否能匹配，直至添加完整个字符串 s 和 p。
+   - ![正则表达式匹配](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/正则表达式匹配.png)
+   - ![正则表达式匹配DP](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/正则表达式匹配DP.png)
+
+## Q20. 表示数值的字符串
+
+​	请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100"、"5e2"、"-123"、"3.1416"、"-1E-16"、"0123"都表示数值，但"12e"、"1a3.14"、"1.2.3"、"+-5"及"12e+5.4"都不是。
+
+解：
+
+1. 遍历判断 O(N) O(1) - 逐位遍历判断是否符合数字要求
+
+   - '.'出现正确的情况：只出现一次，且在e/E前；
+
+   - 'e/E'出现正确的情况：只出现一次，且出现前有数字；
+
+   - '+/-'出现正确的情况：只能在开头或者e/E后一位；
+
+   - ```java
+     public static boolean isNumber(String s) {
+         boolean hasNum = false, hasDecimal = false, hasE = false; // 是否有数字、小数、e/E
+         s = s.trim(); // 删除前后多余空格
+         for (int i = 0; i < s.length(); i++) {
+             if (s.charAt(i) >= '0' && s.charAt(i) <= '9') hasNum = true;
+             else if (s.charAt(i) == '.' && !hasDecimal && !hasE) {
+                 hasDecimal = true;
+             } else if ((s.charAt(i) == 'e' || s.charAt(i) == 'E') && !hasE && hasNum){
+                 hasE = true;
+                 hasNum = false;
+             } else if ((s.charAt(i) == '+' || s.charAt(i) == '-') && (i == 0 || s.charAt(i - 1) == 'e' || s.charAt(i - 1) == 'E')) {
+     
+             } else {
+                 return false;
+             }
+         }
+         return hasNum;
+     }
+     ```
+
+2. 有限状态自动机 O(N) O(1) 
+
+   - ![判断数字有限状态自动机](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/判断数字有限状态自动机.png)
+
+   - ```java
+     class Solution {
+         public boolean isNumber(String s) {
+             Map[] states = {
+                 new HashMap<>() {{ put(' ', 0); put('s', 1); put('d', 2); put('.', 4); }}, // 0.
+                 new HashMap<>() {{ put('d', 2); put('.', 4); }},                           // 1.
+                 new HashMap<>() {{ put('d', 2); put('.', 3); put('e', 5); put(' ', 8); }}, // 2.
+                 new HashMap<>() {{ put('d', 3); put('e', 5); put(' ', 8); }},              // 3.
+                 new HashMap<>() {{ put('d', 3); }},                                        // 4.
+                 new HashMap<>() {{ put('s', 6); put('d', 7); }},                           // 5.
+                 new HashMap<>() {{ put('d', 7); }},                                        // 6.
+                 new HashMap<>() {{ put('d', 7); put(' ', 8); }},                           // 7.
+                 new HashMap<>() {{ put(' ', 8); }}                                         // 8.
+             };
+             int p = 0;
+             char t;
+             for(char c : s.toCharArray()) {
+                 if(c >= '0' && c <= '9') t = 'd';
+                 else if(c == '+' || c == '-') t = 's';
+                 else if(c == 'e' || c == 'E') t = 'e';
+                 else if(c == '.' || c == ' ') t = c;
+                 else t = '?';
+                 if(!states[p].containsKey(t)) return false;
+                 p = (int)states[p].get(t);
+             }
+             return p == 2 || p == 3 || p == 7 || p == 8;
+         }
+     }
+     ```
 
 ## Q21. 调整数组顺序使奇数位于偶数前面：遍历找奇偶并用数组存储、**双指针交换**
 

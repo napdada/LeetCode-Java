@@ -30,11 +30,78 @@
 
 1. 遍历计数 - 遍历 nums[] ，利用 countArray[] 记录数出现的次数。
 
+   - ```java
+     /**
+      * 遍历 nums[] ，利用 countArray[] 记录数出现的次数
+      * @author PAN
+      * @param nums int[]
+      * @return repeatNumber：第一个重复出现的数字
+      */
+     public static int findReapeatNumber(int[] nums) {
+         int[] countArray = new int[nums.length];
+         int repeatNumber = -1;
+         for(int num : nums) {
+             countArray[num]++;
+             if(countArray[num] > 1) {
+                 repeatNumber = num;
+                 break;
+             }
+         }
+         return repeatNumber;
+     }
+     ```
+
 2. 排序后再找重 - 排序 nums[]，再遍历找到第一个重复数字。
+
+   - ```java
+     /**
+      * 排序 nums[]，再遍历找到第一个重复数字
+      * @author PAN
+      * @param nums int[]
+      * @return repeatNumber：第一个重复出现的数字
+      */
+     public static int findReapeatNumber2(int[] nums) {
+         int repeatNumber = -1;
+         Arrays.sort(nums);
+         int record = nums[0];
+         for(int i = 1; i < nums.length; i++) {
+             if(nums[i] == record) {
+                 repeatNumber = record;
+                 break;
+             } else {
+                 record = nums[i];
+             }
+         }
+         return repeatNumber;
+     }
+     ```
 
 3. **原地交换** - 遍历中，第一次遇到数字 xx 时，将其交换至索引 xx 处，而当第二次遇到数字 xx 时，一定有 nums[x] = x，此时即可得到一组重复数字。
 
-   ![原地交换](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/原地交换.png)
+   ![原地交换](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/原地交换.png)
+
+   - ```java
+     /**
+      * 原地交换
+      * 遍历中，第一次遇到数字 xx 时，将其交换至索引 xx 处；
+      * 而当第二次遇到数字 xx 时，一定有 nums[x] = x ，此时即可得到一组重复数字。
+      * @author 网友
+      */
+     public static int findReapeatNumber0(int[] nums) {
+         int i = 0;
+         while(i < nums.length) {
+             if(nums[i] == i) {
+                 i++;
+                 continue;
+             }
+             if(nums[nums[i]] == nums[i]) return nums[i];
+             int tmp = nums[i];
+             nums[i] = nums[tmp];
+             nums[tmp] = tmp;
+         }
+         return -1;
+     }
+     ```
 
 ## Q4. 二维数组中的查找：暴力求解、**类二叉查找树**
 
@@ -61,9 +128,59 @@
 
 1. 暴力求解 O(N + M) - 双重循环遍历整个数组，与所有元素一一比较。
 
+   - ```java
+     /**
+      * 暴力求解
+      * @author PAN
+      * @param matrix int[][]
+      * @param target int
+      * @return true/false：查找结果
+      * @time O(N * M)
+      */
+     public static boolean findNumberIn2DArray(int[][] matrix, int target) {
+         for (int i = 0; i < matrix.length; i++) {
+             for (int j = 0; j < matrix[i].length; j++) {
+                 if (target == matrix[i][j]) {
+                     return true;
+                 }
+             }
+         }
+         return false;
+     }
+     ```
+
 2. **类二叉查找树 O(N + M)** - 将矩阵逆时针旋转 45° ，并将其转化为图形式，发现其类似于二叉搜索树，即对于每个元素，其左分支元素更小、右分支元素更大。从二维数组右上角元素开始与 target 比较，target 大则向下比较， target 小则向左比较。
 
-   ![类二叉搜索树](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/类二叉搜索树.png)
+   ![类二叉搜索树](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/类二叉搜索树.png)
+
+   - ```java
+     /**
+      * 线性查找：从二维数组右上角元素开始与 target 比较，target 大则向下比较， target 小则向左比较
+      * @author 网友
+      * @param matrix 二维数组
+      * @param target 查找目标
+      * @return true/false
+      * @time O(N + M)
+      */
+     public static boolean findNumberIn2DArray2(int[][] matrix, int target) {
+         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+             return false;
+         } else {
+             int i = 0, j = matrix[0].length - 1;
+             do {
+                 if (target < matrix[i][j]) {
+                     j--;
+                 } else if (target == matrix[i][j]) {
+                     return true;
+                 } else {
+                     i++;
+                 }
+             } while (i < matrix.length && j > -1);
+     
+             return false;
+         }
+     }
+     ```
 
 ## Q5. 替换空格：遍历替换、**原地修改**
 
@@ -77,7 +194,39 @@
 解：
 
 1. 遍历查找替换 O(N) O(N) - 逐个字符遍历字符串查找空格，字符串不为空格追加到新字符串，为空格追加"%20"。
+
+   - ```java
+     /**
+      * 遍历查找替换：逐个字符遍历字符串查找空格，字符串不为空格追加到新字符串，为空格追加"%20"
+      * @author PAN
+      * @param s 原字符串
+      * @return 替换后字符串
+      * @time O(N)
+      * @space O(N)
+      */
+     public static String replaceSpace(String s) {
+         StringBuilder newS = new StringBuilder();
+         for (int i = 0; i < s.length(); i++) {
+             char c = s.charAt(i);
+             if(c != ' ') {
+                 newS.append(c);
+             } else {
+                 newS.append("%20");
+             }
+         }
+     
+         return newS.toString();
+     }
+     ```
+
 2. 调用`replace()`
+
+   - ```java
+     public static String replaceSpace2(String s) {
+         return s.replace(" ","%20");
+     }
+     ```
+
 3. **原地修改 O(N) O(1)** - 不使用新字符串来存储，但在 Java Python 中不行，因它们字符串建立后不可改变，在 C++ 中可以通过两个指针来原地修改
 
 ## Q6. 从尾到头打印链表：栈、递归
@@ -92,6 +241,31 @@
 解：
 
 1. 栈 O(N) O(N)  - 先入后出实现从尾到头打印。
+
+   - ```java
+     /**
+      * 栈：先入后出实现从尾到头打印
+      * @author PAN
+      * @param head 单链表头
+      * @return 反转后单链表（以数组形式）
+      * @time O(N)
+      * @space O(N)
+      */
+     public static int[] reversePrint(ListNode head) {
+         Stack<ListNode> s = new Stack<ListNode>();
+         while (head != null) {
+             s.push(head);
+             head = head.next;
+         }
+         int len = s.size();
+         int[] array = new int[len];
+         for (int i = 0; i < len; i++) {
+             array[i] = s.pop().val;
+         }
+         return array;
+     }
+     ```
+
 2. 递归  O(N) O(N)。
 
 ## Q7. 重建二叉树 - 递归、迭代
@@ -117,49 +291,66 @@
 
 1. **递归 O(N) O(N)**
 
-   > **分治算法解析：**
-   >
-   > - **递推参数**： 根节点在前序遍历的索引 root 、子树在中序遍历的左边界 left 、子树在中序遍历的右边界 right ；
-   >
-   > - **终止条件**： 当 left > right ，代表已经越过叶节点，此时返回 nullnull ；
-   >
-   > - **递推工作**：
-   >
-   >   1. 建立根节点 node ： 节点值为 preorder[root] ；
-   >
-   >   2. 划分左右子树： 查找根节点在中序遍历 inorder 中的索引 i ；
-   >      为了提升效率，本文使用哈希表 dic 存储中序遍历的值与索引的映射，查找操作的时间复杂度为 O(1)O(1)
-   >
-   >   3. 构建左右子树： 开启左右子树递归；**几个索引值的确定容易出错！！！**
-   >
-   >      |        | 根节点索引          | 中序遍历左边界 | **中序遍历右边界** |
-   >      | ------ | ------------------- | -------------- | ------------------ |
-   >      | 左子树 | root + 1            | left           | i - 1              |
-   >      | 右子树 | i - left + root + 1 | i + 1          | right              |
-   >
-   >      - i - left + root + 1含义为 根节点索引 + 左子树长度 + 1
-   >
-   > - **返回值**： 回溯返回 node ，作为上一层递归中根节点的左 / 右子节点；
+   **分治算法解析：**
+
+   - **递推参数**： 根节点在前序遍历的索引 root 、子树在中序遍历的左边界 left 、子树在中序遍历的右边界 right ；
+
+   - **终止条件**： 当 left > right ，代表已经越过叶节点，此时返回 nullnull ；
+
+   - **递推工作**：
+
+     1. 建立根节点 node ： 节点值为 preorder[root] ；
+
+     2. 划分左右子树： 查找根节点在中序遍历 inorder 中的索引 i ；
+        为了提升效率，本文使用哈希表 dic 存储中序遍历的值与索引的映射，查找操作的时间复杂度为 O(1)O(1)
+
+     3. 构建左右子树： 开启左右子树递归；**几个索引值的确定容易出错！！！**
+
+        |        | 根节点索引          | 中序遍历左边界 | **中序遍历右边界** |
+        | ------ | ------------------- | -------------- | ------------------ |
+        | 左子树 | root + 1            | left           | i - 1              |
+        | 右子树 | i - left + root + 1 | i + 1          | right              |
+
+        - i - left + root + 1含义为 根节点索引 + 左子树长度 + 1
+
+   - **返回值**： 回溯返回 node ，作为上一层递归中根节点的左 / 右子节点；
+
+   - ```java
+     /**
+      * 递归重建二叉树
+      * @author 网友
+      * @param root 前序中根索引
+      * @param left 前序中左子树索引
+      * @param right 前序中右子树索引
+      * @return 树结点
+      * @time O(N)
+      * @space O(N)
+      */
+     TreeNode recur(int root, int left, int right) {
+         if (left > right) return null;
+         TreeNode node = new TreeNode(preorder[root]);
+         int i = dic.get(preorder[root]);
+         node.left = recur(root + 1, left, i -1);
+         node.right = recur(i - left + root + 1, i + 1, right);
+         return node;
+     }
+     ```
 
    
 
 2. 迭代 O(N) O(N)，不好理解
 
-   > 对于前序遍历中的任意两个连续节点 uu 和 vv，根据前序遍历的流程，我们可以知道 uu 和 vv 只有两种可能的关系：
-   >
-   > - vv 是 uu 的左儿子。这是因为在遍历到 uu 之后，下一个遍历的节点就是 uu 的左儿子，即 vv；
-   >
-   > - uu 没有左儿子，并且 vv 是 uu 的某个祖先节点（或者 uu 本身）的右儿子。
-   >
-   > 
-   >
-   > **算法：**
-   >
-   > - 用一个栈和一个指针辅助进行二叉树的构造。初始时栈中存放了根节点（前序遍历的第一个节点），指针指向中序遍历的第一个节点；
-   >
-   > - 我们依次枚举前序遍历中除了第一个节点以外的每个节点。如果 index 恰好指向栈顶节点，那么我们不断地弹出栈顶节点并向右移动 index，并将当前节点作为最后一个弹出的节点的右儿子；如果 index 和栈顶节点不同，我们将当前节点作为栈顶节点的左儿子；
-   >
-   > - 无论是哪一种情况，我们最后都将当前的节点入栈。
+   - 对于前序遍历中的任意两个连续节点 uu 和 vv，根据前序遍历的流程，我们可以知道 uu 和 vv 只有两种可能的关系：
+     - vv 是 uu 的左儿子。这是因为在遍历到 uu 之后，下一个遍历的节点就是 uu 的左儿子，即 vv；
+
+     - uu 没有左儿子，并且 vv 是 uu 的某个祖先节点（或者 uu 本身）的右儿子。
+
+   - **算法：**
+     - 用一个栈和一个指针辅助进行二叉树的构造。初始时栈中存放了根节点（前序遍历的第一个节点），指针指向中序遍历的第一个节点；
+
+     - 我们依次枚举前序遍历中除了第一个节点以外的每个节点。如果 index 恰好指向栈顶节点，那么我们不断地弹出栈顶节点并向右移动 index，并将当前节点作为最后一个弹出的节点的右儿子；如果 index 和栈顶节点不同，我们将当前节点作为栈顶节点的左儿子；
+
+     - 无论是哪一种情况，我们最后都将当前的节点入栈。
 
 ## Q9. 用两个栈实现队列：栈
 
@@ -184,6 +375,27 @@
 解：
 
 1. 一栈负责进，一栈复杂出 O(N) O(N)
+
+   - ```java
+     /**
+      * 一栈负责进，一栈复杂出
+      * @author PAN
+      * @return 队列头
+      * @time O(N)
+      * @space O(N)
+      */
+     public int deleteHead() {
+         if (s2.size() == 0) {
+             if (s1.size() == 0) return -1;
+             else {
+                 while (!s1.isEmpty()) {
+                     s2.push(s1.pop());
+                 }
+             }
+         }
+         return s2.pop();
+     }
+     ```
 
 ## Q10 - I. 斐波那契数列：递归、**动态规划DP**
 
@@ -210,7 +422,68 @@
 解：
 
 1. 递归 - 效率低，存在大量重复计算；
+
+   - ```java
+     /**
+      * 递归求解 - 将斐波那契公式转换为递归形式
+      * @author PAN
+      * @param n 数列第 n 项
+      * @return 斐波那契值
+      */
+     public static long fib(int n) {
+         if (n == 0) return 0;
+         else if (n == 1) return 1;
+         else {
+             if (fib(n - 1) + fib(n - 2) > 1000000007) return (fib(n - 1) + fib(n - 2)) % 1000000007;
+             else return fib(n - 1) + fib(n - 2);
+         }
+     }
+     ```
+
 2. **动态规划 O(N) O(N)** - 某一项等于前两项之和，用循环依次计算。**【注意！！！】先求余与最后求余返回结果一致，但先求可以防止 int 溢出**
+
+   - ```java
+     /**
+      * 动态规划 - 某一项等于前两项之和，用循环依次计算。【注意！！！】先求余与最后求余返回结果一致，但先求可以防止 int 溢出
+      * @author PAN
+      * @param n
+      * @return
+      * @time O(N)
+      * @space O(1)
+      */
+     public static int fib2(int n) {
+         int a = 0, b = 1;
+         switch (n) {
+             case 0: return 0;
+             case 1: return 1;
+             default: {
+                 int tmp;
+                 for (int i = 1; i < n; i++) {
+                     tmp = (a + b) % 1000000007;
+                     a = b;
+                     b = tmp;
+                 }
+                 return b;
+             }
+         }
+     }
+     
+     /**
+      * 动态规划 - 精简代码
+      * @author 网友
+      * @param n
+      * @return
+      */
+     public static int fib3(int n) {
+         int a = 0, b = 1, sum;
+         for(int i = 0; i < n; i++){
+             sum = (a + b) % 1000000007;
+             a = b;
+             b = sum;
+         }
+         return a;
+     }
+     ```
 
 ## Q10 - II. 青蛙跳台阶问题：递归、**动态规划DP**
 
@@ -241,12 +514,23 @@
 
 2. 动态规划 
 
-   > 此题就是斐波那契数列的变形（区别在于初始值不一样），设跳上 n 级台阶有 f(n) 种跳法。在所有跳法中，青蛙的最后一步只有两种情况： 跳上 1 级或 2 级台阶。
-   >
-   > - 当为 1 级台阶： 剩 n-1 个台阶，此情况共有 f(n-1) 种跳法；
-   > - 当为 2 级台阶： 剩 n-2 个台阶，此情况共有 f(n-2) 种跳法。
-   >
-   > f(n) 为以上两种情况之和，即 f(n)=f(n-1)+f(n-2)。
+   - 此题就是斐波那契数列的变形（区别在于初始值不一样），设跳上 n 级台阶有 f(n) 种跳法。在所有跳法中，青蛙的最后一步只有两种情况： 跳上 1 级或 2 级台阶。
+     - 当为 1 级台阶： 剩 n-1 个台阶，此情况共有 f(n-1) 种跳法；
+     - 当为 2 级台阶： 剩 n-2 个台阶，此情况共有 f(n-2) 种跳法。
+     - f(n) 为以上两种情况之和，即 f(n)=f(n-1)+f(n-2)。
+
+   - ```java
+     public static int numWays(int n) {
+         int a = 1, b = 1, sum;
+         for (int i = 0; i < n; i++) {
+             sum = (a + b) % 1000000007;
+             a = b;
+             b = sum;
+         }
+         return a;
+     }
+     ```
+
 
 ## Q11. 旋转数组的最小数字：遍历寻找、**二分法**
 
@@ -268,11 +552,63 @@
 
 1. 遍历直到第一个变小的数 O(N) O(1) - 首先用min记录数组中第一个元素的值，之后便利数组，一一与min比较，第一个比min小的即是结果；
 
+   - ```java
+     /**
+      * 遍历直到第一个变小的数
+      * @author PAN
+      * @param numbers 两个非递减数列构成的数组
+      * @return min
+      * @time O(N)
+      * @space O(1)
+      */
+     public static int minArray(int[] numbers) {
+         int min = numbers[0];
+         for (int i = 1; i < numbers.length; i++) {
+             if (numbers[i] < min) {
+                 min = numbers[i];
+                 break;
+             }
+         }
+         return min;
+     }
+     ```
+
 2. **二分法 O(log N) O(1)** - 因为整个数组是由两个非递减数列构成的，所以可以用二分来缩小范围
 
    1）i = 0, j = length - 1, m = (i + j) / 2；
 
    2）比较索引为m和j数组元素大小，大于则 i = m + 1，等于则 j--，小于则 j = m（或者调用上述遍历找min）
+
+   - ```java
+     /**
+      * 二分法：因为整个数组是由两个非递减数列构成的，所以可以用二分来缩小范围
+      * @author 网友
+      * @param numbers 两个非递减数列构成的数组
+      * @return min
+      * @time O(logN)
+      * @space O(1)
+      */
+     public static int minArray2(int[] numbers){
+         int i = 0, j = numbers.length - 1;
+         int m = 0;
+         while (i < j) {
+             m = (i + j) / 2;
+             if (numbers[m] > numbers[j]) i = m + 1;
+             else if (numbers[m] == numbers[j]) j--;
+             else {
+                 int min = numbers[i];
+                 for (int k = i + 1; k < m + 1; k++) {
+                     if (numbers[k] < min){
+                         min = numbers[k];
+                         break;
+                     }
+                 }
+                 return min;
+             }
+         }
+         return numbers[i];
+     }
+     ```
 
 ## Q12. 矩阵中的路径：**DFS+剪枝**
 
@@ -300,7 +636,7 @@
 
 1. **DFS + 剪枝 O(3^K*MN) O(K)**：
 
-   ![DFS+剪枝](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/DFS+剪枝.png)
+   ![DFS+剪枝](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/DFS+剪枝.png)
 
    1）DFS暴力遍历矩阵中所有字符串可能性，通过递归先朝一个方向搜到底，再回溯至上个节点，沿另一个方向搜索，以此类推；
 
@@ -363,11 +699,72 @@
 
    - **数位和增量公式：不需要每次都用整除和求余去计算位数和**
 
-     ![数位和增量公式](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/数位和增量公式.png)
+     ![数位和增量公式](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/数位和增量公式.png)
 
    - 可达解分析：**仅需向右、向下移动**
 
    - 与Q12类似，采用递归求解即可，代码十分类似
+
+   - ```java
+     /**
+      * 递归求解，与Q12类似，仅需向右、向下移动
+      * @author PAN
+      * @param m 行数
+      * @param n 列数
+      * @param k 位数和上限
+      * @return 可达数
+      * @time O(MN)
+      * @space O(MN)
+      */
+     int movingCount(int m, int n, int k) {
+         DFS(m, n, 0, 0, k);
+         return xy.size();
+     }
+     
+     /**
+      * DFS：递归函数
+      * @author PAN
+      * @param m 行数
+      * @param n 列数
+      * @param i 初始位置
+      * @param j 初始位置
+      * @param k 位数和上限
+      */
+     void DFS(int m, int n, int i, int j, int k) {
+         int sum = i / 100 + i / 10 + i % 10 + j / 100 + j / 10 + j % 10;
+         boolean flag = sum > k ? false : true;
+         String tmp = i + "," + j;
+         if (i < 0 || i >= m || j < 0 || j >= n || !flag || xy.contains(tmp)) return;
+         xy.add(tmp);
+         DFS(m, n, i, j + 1, k);
+         DFS(m, n, i + 1, j, k);
+     
+         // 优化，不必向上、向左，也意味不需要判断 i < 0 || j < 0
+         // DFS(m, n, i, j - 1, k);
+         // DFS(m, n, i - 1, j, k);
+     }
+     
+     /**
+      * 递归求解优化：用 visited 数组记录是否访问，并精简代码
+      * @author PAN
+      * @param m 行数
+      * @param n 列数
+      * @param k 位数和上限
+      * @return 可达数
+      * @time O(MN)
+      * @space O(MN)
+      */
+     int movingCount2(int m, int n, int k) {
+         boolean[][] visited = new boolean[m][n];
+         return DFS2(m, n, 0, 0, k, visited);
+     }
+     int DFS2(int m, int n, int i, int j, int k, boolean[][] visited){
+         int sum = i / 100 + i / 10 + i % 10 + j / 100 + j / 10 + j % 10;
+         if (i >= m || j >= n || sum > k || visited[i][j]) return 0;
+         visited[i][j] = true;
+         return DFS2(m, n, i, j + 1, k, visited) + DFS2(m, n, i + 1, j, k, visited) + 1;
+     }
+     ```
 
 2. 广度优先遍历BFS O(MN) O(MN)
 
@@ -384,6 +781,35 @@
      5）将当前元素的下方、右方单元格数位入队；
 
      6）队列为空时，停止迭代
+     
+   - ```java
+     /**
+      * BFS：用队列实现，重点在于数位和增量公式(不需要每次都用整除和求余去计算位数和)
+      * @author 网友
+      * @param m 行数
+      * @param n 列数
+      * @param k 位数和上限
+      * @return 可达数
+      * @time O(MN)
+      * @space O(MN)
+      */
+     public int movingCount3(int m, int n, int k) {
+         boolean[][] visited = new boolean[m][n];
+         int res = 0;
+         Queue<int[]> queue= new LinkedList<int[]>();
+         queue.add(new int[] { 0, 0, 0, 0 });
+         while(queue.size() > 0) {
+             int[] x = queue.poll();
+             int i = x[0], j = x[1], si = x[2], sj = x[3];
+             if(i >= m || j >= n || k < si + sj || visited[i][j]) continue;
+             visited[i][j] = true;
+             res ++;
+             queue.add(new int[] { i + 1, j, (i + 1) % 10 != 0 ? si + 1 : si - 8, sj }); // 数位和增量公式
+             queue.add(new int[] { i, j + 1, si, (j + 1) % 10 != 0 ? sj + 1 : sj - 8 });
+         }
+         return res;
+     }
+     ```
 
 ## Q14 - I. 剪绳子：**数学推导、贪心、动态规划**
 
@@ -411,21 +837,42 @@
 
    - 求导也可以证明，同时可以求得驻点为e，即2.7左右，通过带入2、3可以得到绳子越多切分成长度3，乘积越大；
 
-     ![绳子切分](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/绳子切分.png)
+     ![绳子切分](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分.png)
 
    - 那么转换成以下算法：
 
      1）3a + b = n，当 n <= 3 时，由于 m > 1，那么必须有一段绳子长度为1，乘积即为 n - 1；
 
      2）当 n > 3 时，对 b 讨论，即 n % 3 讨论：b = 0 时，乘积为 3 ^ a；b = 1 时，乘积为 3 ^ （a - 1） * 4，即有一段长度为3的绳子要拿出来和长度为1的绳子形成2 + 2；b = 2 时，乘积为 3 ^ a * 2；
+     
+   - ```java
+     /**
+      * 数学推导/贪心：
+      *  1. 绳子越等分乘积越大；
+      *  2. 越多切分成长度 3 ，乘积越大；
+      *  3. 以长度 3 为基础去切分，对最后一段长度（可能：0， 1， 2）进行讨论计算；
+      * @author PAN & 网友：自己推断了1，但2不太确定，可以用求导得驻点是e（2.7）
+      * @param n 绳子长度
+      * @return 最大乘积
+      * @time O(1)
+      * @space O(1)
+      */
+     public static int cuttingRope(int n) {
+         if (n <= 3) return n - 1;
+         int a = n / 3, b = n % 3;
+         if(b == 0) return (int) Math.pow(3, a);
+         else if(b == 1) return 4 * (int) Math.pow(3, a - 1);
+         else return 2 * (int) Math.pow(3, a);
+     }
+     ```
 
 2. **贪心**
 
-   - ![绳子切分贪心](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/绳子切分贪心.png)
+   - ![绳子切分贪心](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分贪心.png)
 
 3. 动态规划 O(N^2) O(N)
 
-   - ![绳子切分动态规划](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/绳子切分动态规划.png)
+   - ![绳子切分动态规划](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分动态规划.png)
 
    - ```java
      class Solution {
@@ -466,9 +913,32 @@
 
 1. 循环求余 O(N) O(1) - 每一次幂运算都求一次余数；
 
+   - ```java
+     /**
+      * 循环求余
+      * @author PAN
+      * @param n 绳子长度
+      * @return 最大乘积
+      * @time O(N)
+      * @space O(1)
+      */
+     public static int cuttingRope(int n) {
+         if (n <= 3) return n - 1;
+         int a = n / 3, b = n % 3;
+         long mul = 1;
+         int r = 1000000007;
+         for (int i = 0; i < a - 1; i++) {
+             mul = (mul * 3) % r;
+         }
+         if(b == 0) return (int)(mul * 3 % r);
+         else if(b == 1) return (int)((4 * mul) % r);
+         else return (int)(mul * 6 % r);
+     }
+     ```
+
 2. **快速求余 O(log2 N) O(1)**
 
-   - ![快速幂求余](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/快速幂求余.png)
+   - ![快速幂求余](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/快速幂求余.png)
 
    - ```java
      class Solution {
@@ -515,8 +985,51 @@
 
 1. **巧用 n & (n - 1) O(M) O(1)**，M 为 1 的个数。
    - (n−1) 解析： 二进制数字 n 最右边的 1 变成 0 ，此 1 右边的 0 都变成 1 。
+   
    - n \& (n - 1)解析： 二进制数字 n 最右边的 1 变成 0 ，其余不变。
+   
+   - ```java
+     /**
+      * 巧用 n & (n - 1)
+      * (n−1)： 二进制数字 n 最右边的 1 变成 0 ，此 1 右边的 0 都变成 1 。
+      * n & (n - 1)： 二进制数字 n 最右边的 1 变成 0 ，其余不变。
+      * @author 网友 & PAN，借鉴 n & (n - 1) 的思想
+      * @param n 无符号二进制数
+      * @return 1 的个数
+      * @time O(M) M 为 1 的个数
+      * @space O(1)
+      */
+     public static int hammingWeight(int n) {
+         int count = 0;
+         while (n != 0) {
+             n = n & (n - 1);
+             count++;
+         }
+         return count;
+     }
+     ```
+   
 2. 逐位判断 O(log2 N) O(1) - 将 n 和 1 做与操作，结果为 1 时计数，再将 n 向右移位重复操作。
+
+   - ```java
+     /**
+      * 逐位判断：将 n 和 1 做与操作，结果为 1 时计数，再将 n 向右移位重复操作。
+      * @author 网友
+      * @param n 无符号二进制数
+      * @return 1 的个数
+      * @time O(log2 N) M 为 1 的个数
+      * @space O(1)
+      */
+     public static int hammingWeight2(int n) {
+         int count = 0;
+         while (n != 0) {
+             count += n & 1;
+             n >>>= 1; // 这里需要写成>>>，Java中的无符号右移
+             // n = n >> 1; // 自己的写法
+         }
+         return count;
+     }
+     ```
 
 ## Q16. 数值的整数次方：循环求幂、**二进制快速幂**、**二分法快速幂**
 
@@ -542,9 +1055,69 @@
 
 1. 循环求解 O(N) O(1) - 用循环一次次累乘，以求幂运算；
 
+   - ```java
+     /**
+      * 循环求解：用循环一次次累乘，以求幂运算。
+      * 该法有几个坑：
+      * 1. 需要对 x = -1, 0, 1 的特殊情况进行判断；
+      * 2. 测试用例中有一项 n 为 2147483648，超过 int 范围（2147483647），
+      *    需要用long 或者判断 double 精度不够直接置 0；
+      * @author PAN
+      * @param x 底数
+      * @param n 幂次
+      * @return x ^ n
+      * @time O(N)
+      * @space O(1)
+      */
+     public static double myPow(double x, int n) {
+         if (x == 0 || x == 1) return x;
+         double pow = 1;
+         if (n < 0) {
+             n = n * (-1);
+             x = 1.0 / x;
+         }
+         if (x == -1 && n % 2 == 0) return -x;
+         else if (x == -1 && n % 2 != 0) return x;
+         if (n < 0) return 0;
+         for (int i = 0; i < n; i++) {
+             pow *= x;
+             if (pow == 0) break;
+         }
+         return pow;
+     }
+     ```
+
 2. **二进制快速幂 O(log2 N) O(1)** - 利用十进制数字 n 的二进制表示，可对快速幂进行数学化解释。
 
    ![二进制快速幂](/Users/panpan/Documents/Code/DevelopTips/图/算法/二进制快速幂.png)
+
+   - ```java
+     /**
+      * 二进制快速幂：利用十进制数字 n 的二进制表示，可对快速幂进行数学化解释
+      * 或二分法快速幂：对 n 不断除以 2 来快速计算，只需要判断 n 的奇偶
+      * @author 网友
+      * @param x 底数
+      * @param n 幂次
+      * @return x ^ n
+      * @time O(log2 N)
+      * @space O(1)
+      */
+     public static double myPow2(double x, int n) {
+         if (x == 0) return x;
+         double pow = 1.0;
+         long newN = n;
+         if (newN < 0) {
+             newN = -newN;
+             x = 1.0 / x;
+         }
+         while (newN != 0) {
+             if ((newN & 1) == 1) pow *= x;
+             x *= x;
+             newN >>= 1;
+         }
+         return pow;
+     }
+     ```
 
 3. **二分法快速幂 O(log2 N) O(1)** - 与上个方法类似
 
@@ -565,17 +1138,73 @@
 
 1. 循环打印 O(10^N) O(1)（ 列表作为返回结果，不计入额外空间 ） - 直接构建数组循环输出。
 
+   - ```java
+     /**
+      * 循环打印：直接构建数组循环输出
+      * @author PAN
+      * @param n 最大位数
+      * @return 从 1 到最大的 n 位十进制数
+      * @time O(10^N)
+      * @space O(1)
+      */
+     public static int[] printNumbers(int n) {
+         int max = (int) Math.pow(10, n) - 1;
+         int[] printArray = new int[max];
+         for (int i = 0; i < max; i++) {
+             printArray[i] = i + 1;
+         }
+         return printArray;
+     }
+     ```
+
 2. 大数打印 O(10^N) O(10^N) - 题目给定了 int 范围，但实际情况可能会考大数，这时候用 int 无法解，需要用 String。
 
-   - ![大数递归打印](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/大数递归打印.png)
+   - ![大数递归打印](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/大数递归打印.png)
 
    - 主要处理两个问题：
 
      1. 删除高位多余的 0：
 
-        ![删除高位0](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/删除高位0.png)
+        ![删除高位0](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/删除高位0.png)
 
      2. 列表从 1 开始：添加字符串前判断是否为“0”，是则跳过。
+     
+   - ```java
+     /**
+      * 大数打印： 题目给定了 int 范围，但实际情况可能会考大数，这时候用 int 无法解，需要用 String。
+      * @author 网友 & PAN，根据思路改了一些写法，
+      * 但还有问题：这样默认还是 int 范围，应该将 printNumber 返回结果也改为 String
+      * @param n 最大位数
+      * @return 从 1 到最大的 n 位十进制数
+      * @time O(10^N)
+      * @space O(10^N)
+      */
+     public int[] printNumbers2(int n) {
+         this.n = n;
+         this.num = new char[n];
+         this.printArray = new int[(int) Math.pow(10, n) - 1];
+         dfs(0);
+         return this.printArray;
+     }
+     
+     /**
+      * 递归主体：先固定高位，向低位递归，当个位已被固定时，添加数字的字符串
+      * @param x 递归位数（0 - n）
+      */
+     public void dfs(int x) {
+         if (x == this.n) {
+             if (Integer.parseInt(String.valueOf(num)) != 0) {
+                 this.printArray[count] = Integer.parseInt(String.valueOf(num));
+                 count++;
+             }
+             return;
+         }
+         for (char c : this.loop) {
+             this.num[x] = c;
+             dfs(x + 1);
+         }
+     }
+     ```
 
 ## Q18. 删除链表的节点：遍历对比删除
 
@@ -598,6 +1227,30 @@
 解：
 
 1. 遍历对比删除 O(N) O(1) - 从头节点开始依次比较，找到要删除的节点进行删除，即将上一个节点指向下一个节点。
+
+   - ```java
+     /**
+      * 遍历对比删除：从头节点开始依次比较，找到要删除的节点进行删除，即将上一个节点指向下一个节点。
+      * @author PAN
+      * @param head 头节点
+      * @param val 待删除节点的值
+      * @return 头节点
+      * @time O(N)
+      * @space O(1)
+      */
+     public ListNode deleteNode(ListNode head, int val) {
+         if (head.val == val) {
+             head = head.next;
+             return head;
+         }
+         ListNode point = head;
+         while (point.next != null) {
+             if (point.next.val == val) point.next = point.next.next;
+             else point = point.next;
+         }
+         return head;
+     }
+     ```
 
 ## Q19. 正则表达式匹配：**动态规划**
 
@@ -648,8 +1301,111 @@ p = "mis*is*p*."
 
 1. **动态规划 O(NM) O(NM)**
    - 总体思路：每轮添加一个字符并判断是否能匹配，直至添加完整个字符串 s 和 p。
-   - ![正则表达式匹配](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/正则表达式匹配.png)
-   - ![正则表达式匹配DP](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/正则表达式匹配DP.png)
+   
+   - ![正则表达式匹配](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/正则表达式匹配.png)
+   
+   - ![正则表达式匹配DP](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/正则表达式匹配DP.png)
+   
+   - ```java
+     /**
+      * 动态规划：每轮添加一个字符并判断是否能匹配，直至添加完整个字符串 s 和 p
+      * @author 网友
+      * @param s 字符串
+      * @param p 正则表达式
+      * @return 匹配成功与否
+      * @time O(NM)
+      * @space O(NM)
+      */
+     public static boolean isMatch2(String s, String p) {
+         boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];
+         dp[0][0] = true;
+         for (int j = 2; j < p.length() + 1; j += 2) {
+             dp[0][j] = dp[0][j - 2] && p.charAt(j - 1) == '*';
+         }
+         for (int i = 1; i < s.length() + 1; i++) {
+             for (int j = 1; j < p.length() + 1; j++) {
+                 if (p.charAt(j - 1) == '*') {
+                     if (dp[i][j - 2]) dp[i][j] = true;
+                     else if (dp[i - 1][j] && s.charAt(i - 1) == p.charAt(j - 2)) dp[i][j] = true;
+                     else if (dp[i - 1][j] && p.charAt(j - 2) == '.') dp[i][j] = true;
+                 } else {
+                     if (dp[i - 1][j - 1] && s.charAt(i - 1) == p.charAt(j - 1)) dp[i][j] = true;
+                     else if (dp[i - 1][j - 1] && p.charAt(j - 1) == '.') dp[i][j] = true;
+                 }
+             }
+         }
+         return dp[s.length()][p.length()];
+     }
+     ```
+
+## Q20. 表示数值的字符串：逐位判断、**有限状态自动机**
+
+​	请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100"、"5e2"、"-123"、"3.1416"、"-1E-16"、"0123"都表示数值，但"12e"、"1a3.14"、"1.2.3"、"+-5"及"12e+5.4"都不是。
+
+解：
+
+1. 遍历判断 O(N) O(1) - 逐位遍历判断是否符合数字要求
+
+   - '.'出现正确的情况：只出现一次，且在e/E前；
+
+   - 'e/E'出现正确的情况：只出现一次，且出现前有数字；
+
+   - '+/-'出现正确的情况：只能在开头或者e/E后一位；
+
+   - ```java
+     public static boolean isNumber(String s) {
+         boolean hasNum = false, hasDecimal = false, hasE = false; // 是否有数字、小数、e/E
+         s = s.trim(); // 删除前后多余空格
+         for (int i = 0; i < s.length(); i++) {
+             if (s.charAt(i) >= '0' && s.charAt(i) <= '9') hasNum = true;
+             else if (s.charAt(i) == '.' && !hasDecimal && !hasE) {
+                 hasDecimal = true;
+             } else if ((s.charAt(i) == 'e' || s.charAt(i) == 'E') && !hasE && hasNum){
+                 hasE = true;
+                 hasNum = false;
+             } else if ((s.charAt(i) == '+' || s.charAt(i) == '-') && (i == 0 || s.charAt(i - 1) == 'e' || s.charAt(i - 1) == 'E')) {
+     
+             } else {
+                 return false;
+             }
+         }
+         return hasNum;
+     }
+     ```
+
+2. 有限状态自动机 O(N) O(1) 
+
+   - ![判断数字有限状态自动机](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/判断数字有限状态自动机.png)
+
+   - ```java
+     class Solution {
+         public boolean isNumber(String s) {
+             Map[] states = {
+                 new HashMap<>() {{ put(' ', 0); put('s', 1); put('d', 2); put('.', 4); }}, // 0.
+                 new HashMap<>() {{ put('d', 2); put('.', 4); }},                           // 1.
+                 new HashMap<>() {{ put('d', 2); put('.', 3); put('e', 5); put(' ', 8); }}, // 2.
+                 new HashMap<>() {{ put('d', 3); put('e', 5); put(' ', 8); }},              // 3.
+                 new HashMap<>() {{ put('d', 3); }},                                        // 4.
+                 new HashMap<>() {{ put('s', 6); put('d', 7); }},                           // 5.
+                 new HashMap<>() {{ put('d', 7); }},                                        // 6.
+                 new HashMap<>() {{ put('d', 7); put(' ', 8); }},                           // 7.
+                 new HashMap<>() {{ put(' ', 8); }}                                         // 8.
+             };
+             int p = 0;
+             char t;
+             for(char c : s.toCharArray()) {
+                 if(c >= '0' && c <= '9') t = 'd';
+                 else if(c == '+' || c == '-') t = 's';
+                 else if(c == 'e' || c == 'E') t = 'e';
+                 else if(c == '.' || c == ' ') t = c;
+                 else t = '?';
+                 if(!states[p].containsKey(t)) return false;
+                 p = (int)states[p].get(t);
+             }
+             return p == 2 || p == 3 || p == 7 || p == 8;
+         }
+     }
+     ```
 
 ## Q21. 调整数组顺序使奇数位于偶数前面：遍历找奇偶并用数组存储、**双指针交换**
 
@@ -666,7 +1422,91 @@ p = "mis*is*p*."
 解：
 
 1. 遍历找奇偶并用数组存储 O(N) O(N) - 遍历数组，用两个指针指向新数组头尾，遇到奇数往头部放，遇到偶数往尾部放。
+
+   - ```java
+     /**
+      * 遍历找奇偶并用数组存储：遍历数组，用两个指针指向新数组头尾，遇到奇数往头部放，遇到偶数往尾部放。
+      * @author PAN
+      * @param nums 待调整的数组
+      * @return 按奇偶调整后的数组
+      * @time O(N)
+      * @space O(N)
+      */
+     public static int[] exchange(int[] nums) {
+         int i = 0, j = nums.length - 1;
+         int[] exchangeNums = new int[nums.length];
+         for (int k = 0; k < nums.length; k++) {
+             if (nums[k] % 2 == 0) {
+                 exchangeNums[j] = nums[k];
+                 j--;
+             }
+             else {
+                 exchangeNums[i] = nums[k];
+                 i++;
+             }
+         }
+         return exchangeNums;
+     }
+     ```
+
 2. 双指针交换 O(N) O(1) - 一头一尾指针指向原数组，头指针为奇数时右移，尾指针为偶数时左移，找到第一个不满足条件的两个值交换，然后继续循环。
+
+   - ```java
+     /**
+      * 双指针交换：一头一尾指针指向原数组，头指针为奇数时右移，尾指针为偶数时左移，找到第一个不满足条件的两个值交换，然后继续循环。
+      * @author PAN
+      * @param nums 待调整的数组
+      * @return 按奇偶调整后的数组
+      * @time O(N)
+      * @space O(1)
+      */
+     public static int[] exchange2(int[] nums) {
+         int i = 0, j = nums.length - 1;
+         int tmp;
+         while (i < j) {
+             boolean flagI = (nums[i] % 2 == 0);
+             boolean flagJ = (nums[j] % 2 == 1);
+             if (flagI && flagJ) {
+                 tmp = nums[i];
+                 nums[i] = nums[j];
+                 nums[j] = tmp;
+                 i++;
+                 j--;
+             } else {
+                 if (!flagI) i++;
+                 if (!flagJ) j--;
+             }
+         }
+         return nums;
+     }
+     
+     /**
+      * 双指针交换2
+      * @author 网友
+      * @param nums 待调整的数组
+      * @return 按奇偶调整后的数组
+      * @time O(N)
+      * @space O(1)
+      */
+     public int[] exchange3(int[] nums) {
+         int left = 0;
+         int right = nums.length - 1;
+         while (left < right) {
+             while (left < right && nums[left] % 2 != 0) {
+                 left++;
+             }
+             while (left < right && nums[right] % 2 == 0) {
+                 right--;
+             }
+             if (left < right) {
+                 int temp = nums[left];
+                 nums[left] = nums[right];
+                 nums[right] = temp;
+             }
+         }
+         return nums;
+     }
+     ```
 
 
 

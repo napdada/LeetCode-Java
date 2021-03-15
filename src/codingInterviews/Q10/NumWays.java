@@ -1,7 +1,5 @@
 package codingInterviews.Q10;
 
-import com.sun.jmx.snmp.SnmpNull;
-
 /**
  * Q10 - II. 青蛙跳台阶问题
  * 【题目】
