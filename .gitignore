@@ -1,5 +1,6 @@
 
 .DS_Store
-*.class
 *.iml
 *.xml
+*.class
+/mtk/
