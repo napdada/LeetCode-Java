@@ -1712,15 +1712,184 @@ p = "mis*is*p*."
      }
      ```
 
+## Q25. 合并两个排序的链表：遍历比较合并、递归
 
+​	输入两个递增排序的链表，合并这两个链表并使新链表中的节点仍然是递增排序的。
 
+```
+示例1：
 
+输入：1->2->4, 1->3->4
+输出：1->1->2->3->4->4
+```
 
+解：
 
+1. 遍历比较合并 O(N + M) O(1) - 遍历逐个比较大小，将小的加入到新建的头节点后面，大的继续比较；
 
+   - ```java
+     /**
+      * 遍历比较合并：遍历逐个比较大小，将小的加入到新建的头节点后面，大的继续比较
+      * @author PAN
+      * @param l1 非递减链表 1
+      * @param l2 非递减链表 2
+      * @return 非递减合并链表
+      * @time O(M + N)
+      * @space O(1)
+      */
+     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+         if (l1 == null) return l2;
+         if (l2 == null) return l1;
+         ListNode newHead = l1.val < l2.val ? l1 : l2, point = newHead;
+         if (l1.val < l2.val) l1 = l1.next;
+         else l2 = l2.next;
+     
+         while (l1 != null && l2 != null) {
+             if (l1.val < l2.val) {
+                 point.next = l1;
+                 point = point.next;
+                 l1 = l1.next;
+             } else {
+                 point.next = l2;
+                 point = point.next;
+                 l2 = l2.next;
+             }
+         }
+         if (l1 == null) point.next = l2;
+         if (l2 == null) point.next = l1;
+         return newHead;
+     }
+     ```
 
+2. 递归 O(N + M) O(1)；
 
+   - ```java
+     /**
+      * 递归
+      * @author 网友
+      * @param l1 非递减链表 1
+      * @param l2 非递减链表 2
+      * @return 非递减合并链表
+      * @time O(M + N)
+      * @space O(1)
+      */
+     public ListNode mergeTwoLists2(ListNode l1, ListNode l2) {
+         if (l1 == null) {
+             return l2;
+         }
+         if (l2 == null) {
+             return l1;
+         }
+         if (l1.val <= l2.val) {
+             l1.next = mergeTwoLists2(l1.next, l2);
+             return l1;
+         } else {
+             l2.next = mergeTwoLists2(l1, l2.next);
+             return l2;
+         }
+     }
+     ```
 
+## Q27. 二叉树的镜像：递归、栈
 
+​	请完成一个函数，输入一个二叉树，该函数输出它的镜像。
 
+​	例如输入：
 
+ 			4
+
+  		 /   \
+  		2     7
+		 / \   / \
+		1   3 6   9
+	镜像输出：
+
+ 			4
+
+  		 /   \
+  		7     2
+		 / \   / \
+		9   6 3   1
+
+```
+示例 1：
+
+输入：root = [4,2,7,1,3,6,9]
+输出：[4,7,2,9,6,3,1]
+```
+
+1. 递归 O(N) O(N)；
+
+   - ```java
+     /**
+      * 递归
+      * @author PAN
+      * @param root 树根
+      * @return 镜像后的树根
+      * @time O(N)
+      * @space O(N)
+      */
+     public TreeNode mirrorTree(TreeNode root) {
+         if (root == null) return null;
+         return change(root, root.left, root.right);
+     }
+     public TreeNode change(TreeNode root, TreeNode left, TreeNode right) {
+         if (left == null && right == null) return root; // 叶子节点
+         else if (left != null && right == null) {       // 有左子，无右子
+             root.left = null;
+             root.right = change(left, left.left, left.right);
+         }
+         else if (left == null && right != null) {       // 有右子，无左子
+             root.left = change(right, right.left, right.right);
+             root.right = null;
+         }
+         else {  // 双子
+             root.left = change(right, right.left, right.right);
+             root.right = change(left, left.left, left.right);
+         }
+         return root;
+     }
+     
+     /**
+      * 递归 2
+      * @author 网友
+      * @param root 树根
+      * @return 镜像后的树根
+      * @time O(N)
+      * @space O(N)
+      */
+     public TreeNode mirrorTree2(TreeNode root) {
+         if(root == null) return null;
+         TreeNode tmp = root.left;
+         root.left = mirrorTree2(root.right);
+         root.right = mirrorTree2(tmp);
+         return root;
+     }
+     ```
+
+2. 栈 O(N) O(N) - 从上到下，每次用栈保存一层的节点，然后弹出栈进行左右节点的交换；
+
+   - ```java
+     /**
+      * 栈：从上到下，每次用栈保存一层的节点，然后弹出栈进行左右节点的交换
+      * @author 网友 & PAN，借鉴思路实现
+      * @return 镜像后的树根
+      * @time O(N)
+      * @space O(N)
+      */
+     public TreeNode mirrorTree3(TreeNode root) {
+         if (root == null) return root;
+         Stack<TreeNode> s = new Stack<>();
+         TreeNode node, tmp;
+         s.push(root);
+         while (!s.isEmpty()) {
+             node = s.pop();
+             if (node.left != null) s.push(node.left);
+             if (node.right != null) s.push(node.right);
+             tmp = node.left;
+             node.left = node.right;
+             node.right = tmp;
+         }
+         return root;
+     }
+     ```
