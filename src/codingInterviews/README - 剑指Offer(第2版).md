@@ -1847,20 +1847,20 @@ p = "mis*is*p*."
 
 ​	例如输入：
 
- 			4
- 	
- 		 /   \
- 		2     7
- 		 / \   / \
- 		1   3 6   9
- 	镜像输出：
- 	
- 			4
- 	
- 		 /   \
- 		7     2
- 		 / \   / \
- 		9   6 3   1
+​		 4
+
+​	   /   \
+​	  2     7
+​	 / \   / \
+​	1   3 6   9
+镜像输出：
+
+​		 4
+
+​	   /   \
+​	  7     2
+​	 / \   / \
+​	9   6 3   1
 
 ```
 示例 1：
@@ -1944,3 +1944,181 @@ p = "mis*is*p*."
          return root;
      }
      ```
+
+## Q28. 对称的二叉树：BFS、递归
+
+​	请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+
+例如，二叉树 [1,2,2,3,4,4,3] 是对称的。
+
+​		1
+
+   	/ \
+  	2   2
+ 	/ \ / \
+	3  4 4  3
+但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
+
+​		1
+
+   	/ \
+  	2   2
+   	\   \
+   	3    3
+
+```
+示例 1：
+
+输入：root = [1,2,2,3,4,4,3]
+输出：true
+
+示例 2：
+
+输入：root = [1,2,2,null,3,null,3]
+输出：false
+```
+
+解：
+
+1. BFS O(N) O(N) - 逐层将该层所有节点（包括 null）加入 List，对 List 进行镜像判断；
+
+   - ```java
+     /**
+      * BFS的思想：逐层将该层所有节点（包括 null）加入 List，对 List 进行镜像判断
+      * @author PAN
+      * @param root 树根
+      * @return 是否是镜像树
+      * @time 感觉是 O(N)，不太确定
+      * @space O(N)
+      */
+     public boolean isSymmetric(TreeNode root) {
+         if (root == null) return true;
+         ArrayList<TreeNode> treeList = new ArrayList<TreeNode>();
+         treeList.add(root);
+         TreeNode point;
+         while (!treeList.isEmpty()) {
+             // 先判断 List 中是否镜像
+             for (int i = 0; i < treeList.size() / 2; i++) {
+                 if ((treeList.get(i) != null && treeList.get(treeList.size() - 1 - i) != null
+                         && treeList.get(i).val == treeList.get(treeList.size() - 1 - i).val)    // List 头尾项都不为空，且值相等
+                         || (treeList.get(i) == null && treeList.get(treeList.size() - 1 - i) == null )) { // 或者List 头尾项都为空
+                     // 满足两个条件则符合镜像规则
+                 } else return false;    // 否则不对称
+             }
+             // 在上一层是镜像的情况下，将下一层节点加入 List，并将上一层的节点移出 List
+             int len = treeList.size();
+             for (int i = 0; i < len; len--) {
+                 point = treeList.get(i);
+                 if (point != null) {
+                     treeList.add(point.left);
+                     treeList.add(point.right);
+                 }
+                 treeList.remove(i);
+             }
+         }
+         return true;
+     }
+     ```
+
+2. 递归 O(N) O(N)
+
+   - ![对称二叉树递归](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/对称二叉树递归.png)
+
+   - ```java
+     /**
+      * 递归：任意俩节点 L、R，有 L 左子和 R 右子对称、L 右子和 R 左子对称
+      * @author 网友
+      * @param root 树根
+      * @return 是否是镜像树
+      * @time O(N)
+      * @space O(N)
+      */
+     public boolean isSymmetric2(TreeNode root) {
+         return root == null || recur(root.left, root.right);
+     }
+     public boolean recur(TreeNode left, TreeNode right) {
+         if (left == null && right == null) return true;
+         if (left == null || right == null || left.val != right.val) return false;
+         return recur(left.left, right.right) && recur(left.right, right.left);
+     }
+     ```
+
+## Q29. 顺时针打印矩阵：设定四边界
+
+​	输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+
+```
+示例 1：
+
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,3,6,9,8,7,4,5]
+
+示例 2：
+
+输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+输出：[1,2,3,4,8,12,11,10,9,5,6,7]
+```
+
+解：
+
+1. 设定四边界 O(MN) O(1) - 设定右、下、左、上边界，一个小人从左上角开始顺时针由外向里走，每转一圈边界缩小一圈；
+
+   - ```java
+     /**
+      * 设定四边界：设定右、下、左、上边界，一个小人从左上角开始顺时针由外向里走，每转一圈边界缩小一圈
+      * @author PAN
+      * @param matrix 二维数组
+      * @return 顺时针由外向里遍历结果
+      * @time O(M * N)：M：行数，N：列数
+      * @space O(1)：题目本身要求返回 int[]，这个数组不算在 space 里
+      */
+     public static int[] spiralOrder(int[][] matrix) {
+         if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return new int[0];
+         // m：右边界，n：下边界，mm：左边界，nn：上边界，因为从左上顶点开始，所以 mm 初始值为 1（防止重复）
+         int m = matrix.length, n = matrix[0].length, mm = 1, nn = 0;
+         int num = m * n;
+         int[] array = new int[num];
+         int x = 0, y = 0; // 小人坐标(x, y)
+         for (int i = 0; i < num; ) {
+             while (y < n) { // 向右
+                 array[i] = matrix[x][y];
+                 i++;
+                 y++;
+             }
+             if (i == num) break;    // 已遍历完
+             y--;    // 使得超过下标的 y 复原成不超过下标
+             x++;    // 防止重复添加顶点
+             while (x < m) { // 向下
+                 array[i] = matrix[x][y];
+                 i++;
+                 x++;
+             }
+             if (i == num) break;
+             x--;
+             y--;
+             while (y >= nn) { // 向左
+                 array[i] = matrix[x][y];
+                 i++;
+                 y--;
+             }
+             if (i == num) break;
+             y++;
+             x--;
+             while (x >= mm) { // 向上
+                 array[i] = matrix[x][y];
+                 i++;
+                 x--;
+             }
+             if (i == num) break;
+             x++;
+             y++;
+             // 右、下、左、上一次顺时针后，将边界范围缩小一圈
+             m--;
+             n--;
+             mm++;
+             nn++;
+         }
+         return array;
+     }
+     ```
+
