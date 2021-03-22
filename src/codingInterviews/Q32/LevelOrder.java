@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class LevelOrder {
 
     /**
-     * BFS：用队列辅助逐行加入节点
+     * 队列 BFS：用队列辅助逐行加入节点
      * @author PAN
      * @param root 树根
      * @return 从上到下，从左到右顺序打印
