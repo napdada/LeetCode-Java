@@ -1945,7 +1945,7 @@ p = "mis*is*p*."
      }
      ```
 
-## Q28. 对称的二叉树：BFS、递归
+## Q28. 对称的二叉树：BFS、**递归**
 
 ​	请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
 
@@ -1954,15 +1954,15 @@ p = "mis*is*p*."
 ​		1
 
    	/ \
-  	2   2
- 	/ \ / \
-	3  4 4  3
+   	2   2
+   	/ \ / \
+   	3  4 4  3
 但是下面这个 [1,2,2,null,3,null,3] 则不是镜像对称的:
 
 ​		1
 
    	/ \
-  	2   2
+   	2   2
    	\   \
    	3    3
 
@@ -2043,7 +2043,7 @@ p = "mis*is*p*."
      }
      ```
 
-## Q29. 顺时针打印矩阵：设定四边界
+## Q29. 顺时针打印矩阵：**设定四边界**
 
 ​	输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
 
@@ -2121,4 +2121,407 @@ p = "mis*is*p*."
          return array;
      }
      ```
+
+## Q31. 栈的压入、弹出序列：双指针模拟、栈辅助
+
+​	输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
+
+```
+示例 1：
+
+输入：pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+输出：true
+解释：我们可以按以下顺序执行：
+push(1), push(2), push(3), push(4), pop() -> 4,
+push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
+
+示例 2：
+
+输入：pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+输出：false
+解释：1 不能在 2 之前弹出。
+```
+
+解：
+
+1. 双指针模拟 O(N ^ 2) O(1) - 双指针模拟栈操作，将 pushed 数组当成栈操作：top1、top2 分别指向两个数组模拟栈顶位置，俩 top 不相等则入栈，相等则出栈；
+
+   - ```java
+     /**
+      * 双指针模拟栈操作，将 pushed 数组当成栈操作：
+      * 1. top1、top2 分别指向两个数组模拟栈顶位置；
+      * 2. 俩 top 不相等，则入栈，相等则出栈
+      * @author PAN
+      * @param pushed 入栈
+      * @param popped 出栈
+      * @return 是否成立
+      * @time O(N ^ 2)
+      * @space O(1) 时间换空间，最大程度节省空间
+      */
+     public static boolean validateStackSequences(int[] pushed, int[] popped) {
+         int top1 = 0, top2= 0;
+         int len1 = pushed.length, len2 = popped.length;
+         if (len1 == 0) return true;
+         while (top1 < len1 && top2 < len2) {
+             if (top1 < 0) top1++;   // 防止 top1 = -1
+             if (pushed[top1] != popped[top2]) { // 入栈
+                 top1++;
+             } else {    // 出栈
+                 top1--;
+                 len1--;
+                 top2++;
+                 for (int i = top1 + 1; i < len1; i++) { // 出栈点后的数组内容前移
+                     pushed[i] = pushed[i + 1];
+                 }
+             }
+             if (len1 == 0) return true;
+         }
+         return false;
+     }
+     ```
+
+2. 栈辅助 O(N) O(N) - 利用一个栈辅助，先将 pushed 元素入栈，再判断栈顶与 popped 是否相等，相等则出栈，不等则继续进栈；
+
+   - ```java
+     /**
+      * 栈辅助：利用一个栈辅助，先将 pushed 元素入栈，再判断栈顶与 popped 是否相等，相等则出栈，不等则继续进栈
+      * @author 网友
+      * @param pushed 入栈
+      * @param popped 出栈
+      * @return 是否成立
+      * @time O(N)
+      * @space O(N)
+      */
+     public static boolean validateStackSequences2(int[] pushed, int[] popped) {
+         Stack<Integer> s = new Stack<>();
+         int j = 0;
+         for (int i = 0; i < pushed.length; i++) {
+             s.push(pushed[i]);
+             while (!s.isEmpty() && s.peek() == popped[j]) {
+                 s.pop();
+                 j++;
+             }
+         }
+         return s.isEmpty();
+     }
+     ```
+
+## Q32 - I. 从上到下打印二叉树：队列 BFS
+
+​	从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+
+```
+例如:
+给定二叉树: [3,9,20,null,null,15,7],
+	3
+   / \
+  9  20
+    /  \
+   15   7
+   
+返回：
+[3,9,20,15,7]
+```
+
+解：
+
+1. 队列 BFS O(N) O(N) - 用队列辅助逐行加入节点
+
+   - ```java
+     /**
+      * 队列 BFS：用队列辅助逐行加入节点
+      * @author PAN
+      * @param root 树根
+      * @return 从上到下，从左到右顺序打印
+      * @time O(N)
+      * @space O(N)
+      */
+     public int[] levelOrder(TreeNode root) {
+         ArrayList<TreeNode> list = new ArrayList();
+         if (root != null) list.add(root);
+         TreeNode point;
+         int i = 0;
+         while (i < list.size()) {
+             point = list.get(i);
+             if (point.left != null) list.add(point.left);   // 左子不为空
+             if (point.right != null) list.add(point.right); // 右子不为空
+             i++;
+         }
+         int[] treeNode = new int[list.size()];
+         i = 0;
+         for (TreeNode node : list) {
+             treeNode[i] = node.val;
+             i++;
+         }
+         return treeNode;
+     }
+     ```
+
+## Q32 - II. 从上到下打印二叉树 II：队列 BFS、**递归 BFS**
+
+​	从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。
+
+```
+例如:
+给定二叉树: [3,9,20,null,null,15,7],
+	3
+   / \
+  9  20
+    /  \
+   15   7
+   
+返回其层次遍历结果：
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+```
+
+解：
+
+1. 队列 BFS O(N) O(N) - 用队列辅助逐行加入节点，用上一问代码改动（加入分层）；
+
+   - ```java
+     /**
+      * 队列 BFS - 用队列辅助逐行加入节点，用上一问代码改动（加入分层）
+      * @author PAN
+      * @param root 树根
+      * @return 从上到下从左到右打印节点
+      * @time O(N)
+      * @space O(N)
+      */
+     public List<List<Integer>> levelOrder2(TreeNode root) {
+         List<List<Integer>> treeNodeVal2 = new ArrayList<>();
+         ArrayList<TreeNode> list = new ArrayList();
+         if (root != null) list.add(root);
+         TreeNode point;
+         while (!list.isEmpty()) {
+             List<Integer> tmp = new ArrayList<>();
+             int len = list.size();
+             for (int j = len; j > 0; j--){
+                 point = list.remove(0);
+                 tmp.add(point.val);
+                 if (point.left != null) list.add(point.left);   // 左子不为空
+                 if (point.right != null) list.add(point.right); // 右子不为空
+             }
+             treeNodeVal2.add(tmp);
+         }
+     
+         return treeNodeVal2;
+     }
+     ```
+
+2. 递归 BFS O(N) O(N) - 递归完成 BFS；
+
+   - ```java
+     public List<List<Integer>> treeNodeVal = new ArrayList<>();
+     
+     /**
+      * 递归 - 递归完成BFS
+      * @author 网友
+      * @param root 树根
+      * @return 从上到下从左到右打印节点
+      * @time O(N)
+      * @space O(N)
+      */
+     public List<List<Integer>> levelOrder(TreeNode root) {
+         BFS(root, 0);
+         return treeNodeVal;
+     }
+     public void BFS(TreeNode root, int k) { // k 记录层数
+         if (root == null) return;
+         if (treeNodeVal.size() <= k) treeNodeVal.add(new ArrayList<>());
+         treeNodeVal.get(k).add(root.val);
+         if (root.left != null) BFS(root.left, k + 1);
+         if (root.right != null) BFS(root.right, k + 1);
+     }
+     ```
+
+## Q32 - III. 从上到下打印二叉树 III：队列 BFS、递归 BFS
+
+​	请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。
+
+```java
+例如:
+给定二叉树: [3,9,20,null,null,15,7],
+	3
+   / \
+  9  20
+    /  \
+   15   7
+   
+返回其层次遍历结果：
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+```
+
+解：
+
+1. 队列 BFS O(N) O(N) - 用队列辅助逐行加入节点，用上一问代码改动（奇数层向队头添加，欧偶数层向队尾添加）；
+
+   - ```java
+     /**
+      * 队列 BFS - 用队列辅助逐行加入节点，用上一问代码改动（奇数层向队头添加，欧偶数层向队尾添加）
+      * @author PAN
+      * @param root 树根
+      * @return 奇数层从左到右，偶数层从右到左打印节点
+      * @time O(N)
+      * @space O(N)
+      */
+     public List<List<Integer>> levelOrder2(TreeNode root) {
+         List<List<Integer>> treeNodeVal2 = new ArrayList<>();
+         ArrayList<TreeNode> list = new ArrayList();
+         if (root != null) list.add(root);
+         TreeNode point;
+         while (!list.isEmpty()) {
+             List<Integer> tmp = new ArrayList<>();
+             for (int j = list.size(); j > 0; j--){
+                 point = list.remove(0);
+                 // 奇数层向队头添加，欧偶数层向队尾添加
+                 if (treeNodeVal2.size() % 2 == 1) tmp.add(0, point.val);
+                 else tmp.add(point.val);
+                 if (point.left != null) list.add(point.left);   // 左子不为空
+                 if (point.right != null) list.add(point.right); // 右子不为空
+             }
+             // 或者用倒序函数
+             // if (treeNodeVal2..size() % 2 == 1) Collections.reverse(tmp);
+             treeNodeVal2.add(tmp);
+         }
+         return treeNodeVal2;
+     }
+     ```
+
+2. 递归 BFS O(N) O(N) - 递归完成BFS，奇数层向队头添加，欧偶数层向队尾添加；
+
+   - ```java
+     public List<List<Integer>> treeNodeVal = new ArrayList<>();
+     
+     /**
+      * 递归 - 递归完成BFS，奇数层向队头添加，欧偶数层向队尾添加
+      * @author 网友
+      * @param root 树根
+      * @return 奇数层从左到右，偶数层从右到左打印节点
+      * @time O(N)
+      * @space O(N)
+      */
+     public List<List<Integer>> levelOrder(TreeNode root) {
+         BFS(root, 0);
+         return treeNodeVal;
+     }
+     public void BFS(TreeNode root, int k) {
+         if (root == null) return;
+         if (treeNodeVal.size() <= k) treeNodeVal.add(new ArrayList<>());
+         // 奇数层向队头添加，欧偶数层向队尾添加
+         if (k % 2 == 1) treeNodeVal.get(k).add(0, root.val);
+         else treeNodeVal.get(k).add(root.val);
+     
+         BFS(root.left, k + 1);
+         BFS(root.right, k + 1);
+     }
+     ```
+
+## Q33. 二叉搜索树的后序遍历序列：递归、**辅助单调栈**
+
+​	输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回 `true`，否则返回 `false`。假设输入的数组的任意两个数字都互不相同。
+
+```
+参考以下这颗二叉搜索树：
+ 	 5
+	/ \
+   2   6
+  / \
+ 1   3
+ 
+示例 1：
+
+输入: [1,6,3,2,5]
+输出: false
+
+示例 2：
+
+输入: [1,3,2,6,5]
+输出: true
+```
+
+解：
+
+1. 递归 O(N ^ 2) O(N)：
+
+   - ```java
+     /**
+      * 递归：
+      * 1. 二叉搜索树左子都比 root 小，右子都比 root 大；
+      * 2. 数组最后一个元素为 root，从头开始找到一直比 root 小的范围数组下标 left，再找比 root 大的范围数组 right；
+      * 3. 若找到的 right != len - 1，意味不符合二叉搜索树；
+      * @author PAN
+      * @param postorder 后序遍历数组
+      * @return 后序遍历是否是二叉搜索树
+      * @time O(N ^ 2)
+      * @space O(N)
+      */
+     public static boolean verifyPostorder(int[] postorder) {
+         // 为空或者长度为 0 意味到达了叶子节点，返回 true
+         if (postorder == null || postorder.length == 0) return true;
+         int len = postorder.length;
+         int root = postorder[len - 1];
+         // 二叉搜索树左子都比 root 小，右子都比 root 大
+         int left = 0;
+         while (postorder[left] < root) left++;
+         int right = left;
+         while (postorder[right] > root) right++;
+     
+         if (right == len - 1) return verifyPostorder(Arrays.copyOfRange(postorder, 0, left)) && verifyPostorder(Arrays.copyOfRange(postorder, left, right));
+         else return false;  // 不是二叉搜索树
+     }
+     ```
+
+2. 辅助单调栈 O(N) O(N)
+
+   - ![辅助单调栈](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/辅助单调栈.png)
+   
+   - ```java
+     /**
+      * 辅助单调栈：后序遍历的倒序（根、右、左）类似先序遍历的镜像；
+      * @author 网友
+      * @param postorder 后序遍历数组
+      * @return 后序遍历是否是二叉搜索树
+      * @time O(N)
+      * @space O(N)
+      */
+     public boolean verifyPostorder2(int[] postorder) {
+         Stack<Integer> stack = new Stack<>();
+         int root = Integer.MAX_VALUE;
+         for(int i = postorder.length - 1; i >= 0; i--) {
+             if(postorder[i] > root) return false;
+             while(!stack.isEmpty() && stack.peek() > postorder[i])
+                 root = stack.pop();
+             stack.add(postorder[i]);
+         }
+         return true;
+     }
+     ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

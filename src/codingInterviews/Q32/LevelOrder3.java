@@ -1,10 +1,7 @@
 package codingInterviews.Q32;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.ToIntFunction;
 
 /**
  * Q32 - III. 从上到下打印二叉树 III
