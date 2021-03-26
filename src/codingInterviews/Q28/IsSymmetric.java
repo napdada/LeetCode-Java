@@ -1,7 +1,6 @@
 package codingInterviews.Q28;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
 
 /**
  * Q28. 对称的二叉树

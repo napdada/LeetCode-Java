@@ -1,7 +1,5 @@
 package codingInterviews.Q26;
 
-import java.util.Stack;
-
 /**
  * Q26. 树的子结构
  * 【题目】
