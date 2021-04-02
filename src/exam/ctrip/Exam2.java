@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 /**
- * 输出满足条件的组合的最低花费
+ * 携程笔试第二题：输出满足条件的组合的最低花费（NAC）
  */
 public class Exam2 {
     public static void main(String[] args) {

@@ -3,7 +3,7 @@ package exam.ctrip;
 import java.util.Scanner;
 
 /**
- * 输出 SQLite 语句中的表名
+ * 携程笔试第一题：输出 SQLite 语句中的表名（NAC）
  */
 public class Exam {
 
