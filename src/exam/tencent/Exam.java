@@ -1,66 +1,18 @@
-package codingInterviews.Q37;
+package exam.tencent;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
-/**
- * Q37. 序列化二叉树
- * 【题目】
- *      请实现两个函数，分别用来序列化和反序列化二叉树。
- * 【示例】
- *      你可以将以下二叉树：
- * 	        1
- *         / \
- *        2   3
- *           / \
- *          4   5
- *      序列化为 "[1,2,3,null,null,4,5]"
- */
-public class Codec {
-
+public class Exam {
     public static void main(String[] args) {
-        String s = "[1,2,null,3,null,4,null,5]";
-        Codec codec = new Codec();
-        TreeNode treeNode = codec.deserialize(s);
-        String ss = codec.serialize(treeNode);
+        // String s = "[1,2,3,4,5,6,7,8]";
+        // String s = "[302,196,100,null,162,null,null,178,null]";
+        String s = "[1,3,null,5]";
+        Exam exam = new Exam();
+        TreeNode tree = exam.deserialize(s);
+        TreeNode newTree = exam.solve(tree);
     }
 
-    /**
-     * 利用队列：将一颗树按照从上到下从左到右序列化为 String
-     * @author PAN
-     * @param root 树根
-     * @return String
-     * @time O(N)
-     * @space O(N)
-     */
-    public String serialize(TreeNode root) {
-        if (root == null) return "";
-
-        ArrayList<TreeNode> nodeList = new ArrayList<TreeNode>();
-        nodeList.add(root);
-        StringBuilder s = new StringBuilder();
-        while (!nodeList.isEmpty()) {
-            TreeNode tmp = nodeList.remove(0);   // 取出对头，将其左右子加入队列
-            if (tmp != null) {
-                s.append(tmp.val).append(",");
-                nodeList.add(tmp.left);
-                nodeList.add(tmp.right);
-            } else s.append("null,");   // 为空则加入 "null"，会导致叶子节点也将其左右子的 "null" 加入 String，需要后面剔除
-        }
-
-        // 将序列最后连续的 "null" 全部删除
-        String[] split = s.toString().split(",");
-        int i = split.length - 1;
-        while (split[i].equals("null"))
-            i--;
-
-        // 重新构建符合要求的 String
-        StringBuilder str = new StringBuilder("[");
-        for (int j = 0; j < i; j++)
-            str.append(split[j]).append(",");
-        str.append(split[i]).append("]");
-
-        return str.toString();
-    }
 
     /**
      * 利用双队列：将序列化的 String 重新构建为树
@@ -134,4 +86,40 @@ public class Codec {
 
         return nodes[0];
     }
+
+    public TreeNode solve (TreeNode root) {
+        if (root == null) return null;
+        ArrayList<TreeNode> fatherList = new ArrayList<>(), sonList = new ArrayList<>();
+        fatherList.add(root);
+        TreeNode tmp;
+        while (!fatherList.isEmpty()) {
+            boolean flag = false;
+            int i = 0;
+            do {
+                tmp = fatherList.get(i);
+                i++;
+                if (!flag && tmp.left != null && tmp.right != null) {
+                    sonList.add(tmp.left);
+                    sonList.add(tmp.right);
+                } else {
+                    flag = true;
+                    tmp.left = null;
+                    tmp.right = null;
+                }
+            } while (i < fatherList.size());
+            if (flag) {
+                while (!fatherList.isEmpty()) {
+                    TreeNode temp = fatherList.remove(0);
+                    temp.left = null;
+                    temp.right = null;
+                }
+            }
+            else {
+                fatherList = sonList;
+            }
+            sonList = new ArrayList<>();
+        }
+        return root;
+    }
+
 }
