@@ -2122,6 +2122,61 @@ p = "mis*is*p*."
      }
      ```
 
+## Q30. 包含 min 函数的栈：双栈模拟
+
+​	定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的 min 函数在该栈中，调用 min、push 及 pop 的时间复杂度都是 O(1)。
+
+```
+示例:
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.min();   --> 返回 -3.
+minStack.pop();
+minStack.top();      --> 返回 0.
+minStack.min();   --> 返回 -2.
+```
+
+解：
+
+1. 双栈模拟 O(1) O(N)
+
+   - ```java
+     public class MinStack {
+         Stack<Integer> s1, s2;
+         /**
+          * 双栈模拟：一个正常栈 s1、一个存 s1 中的最小值
+          * @author PAN
+          * @time O(1)
+          * @space O(N)
+          */
+         public MinStack() {
+             s1 = new Stack<>();
+             s2 = new Stack<>(); // 辅助栈，用来存放 s1 栈中的最小值
+         }
+     
+         public void push(int x) {
+             s1.push(x);
+             if (s2.isEmpty()) s2.push(x);
+             else s2.push(s2.peek() < x ? s2.peek() : x);
+         }
+     
+         public void pop() {
+             s1.pop();
+             s2.pop();
+         }
+     
+         public int top() {
+             return s1.peek();
+         }
+     
+         public int min() {
+             return s2.peek();
+         }
+     }
+     ```
+
 ## Q31. 栈的压入、弹出序列：双指针模拟、栈辅助
 
 ​	输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
@@ -2502,6 +2557,71 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
              stack.add(postorder[i]);
          }
          return true;
+     }
+     ```
+
+## Q34. 二叉树中和为某一值的路径
+
+​	输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。
+
+```
+示例:
+给定如下二叉树，以及目标和 target = 22，
+
+          5
+         / \
+        4   8
+       /   / \
+      11  13  4
+     /  \    / \
+    7    2  5   1
+
+返回:
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+```
+
+解：
+
+1. DFS O(N) O(N)
+
+   - ```java
+     public class PathSum {
+         List<List<Integer>> pathsList = new ArrayList<>();
+         ArrayList<Integer> pathList = new ArrayList<>();
+         int target;
+         
+         /**
+          * DFS：从根节点加到叶子节点，返回符合要求的路径
+          * @author PAN
+          * @param root 跟节点
+          * @param target 目标节点路径和
+          * @return 路径列表
+          * @time O(N)
+          * @space O(N)
+          */
+         public List<List<Integer>> pathSum(TreeNode root, int target) {
+             this.target = target;
+             DFS(root, 0);
+             return pathsList;
+         }
+         public void DFS(TreeNode root, int sum) {
+             if (root == null) return;
+             if (root.left == null && root.right == null) {
+                 pathList.add(root.val);
+                 sum += root.val;
+                 if (sum == target) pathsList.add(new ArrayList<>(pathList));
+                 pathList.remove(pathList.size() - 1);
+                 return;
+             }
+             pathList.add(root.val);
+             sum += root.val;
+             DFS(root.left, sum);
+             DFS(root.right, sum);
+             pathList.remove(pathList.size() - 1);
+         }
      }
      ```
 
