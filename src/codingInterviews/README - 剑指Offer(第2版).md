@@ -3317,3 +3317,233 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
          arr[j] = tmp;
      }
      ```
+
+## Q41. 数据流中的中位数：插入排序、**大小堆**
+
+​	如何得到一个数据流中的中位数？如果从数据流中读出奇数个数值，那么中位数就是所有数值排序之后位于中间的数值。如果从数据流中读出偶数个数值，那么中位数就是所有数值排序之后中间两个数的平均值。
+
+```
+例如，
+[2,3,4] 的中位数是 3
+[2,3] 的中位数是 (2 + 3) / 2 = 2.5
+```
+
+解：
+
+1. 插入排序 O(N ^ 2) O(N)；
+
+   - ```java
+     /**
+      * 链表实现：addNum 时用插入排序，findMedian 时按奇偶判断返回
+      * @author PAN
+      * @time O(N ^ 2)
+      * @space O(N)
+      */
+     ArrayList<Integer> list;
+     public MedianFinder() {
+         list = new ArrayList<>();
+     }
+     
+     public void addNum(int num) {
+         int i = 0;
+         while (i < list.size() && num > list.get(i)) i++;
+         list.add(i, num);
+     }
+     
+     public double findMedian() {
+         return list.size() % 2 == 0 ?
+                 list.get(list.size() / 2) + list.get(list.size() / 2 - 1) / 2.0 :
+                 list.get(list.size() / 2);
+     }
+     ```
+
+2. **大小堆 O(log N) O(N)；**
+
+   - ```java
+     /**
+      * 优先队列实现大小堆：小顶堆存储较大的一半，大顶堆存储较小的一半；
+      * @author 网友
+      * @time O(log N)
+      * @space O(N)
+      */
+     Queue<Integer> A, B;
+     public MedianFinder() {
+         A = new PriorityQueue<>();
+         B = new PriorityQueue<>((x, y) -> (y - x));
+     }
+     
+     public void addNum2(int num) {
+         if (A.size() != B.size()) {
+             A.add(num);
+             B.add(A.poll());
+         } else {
+             B.add(num);
+             A.add(B.poll());
+         }
+     }
+     
+     public double findMedian2() {
+         return A.size() != B.size() ? A.peek() : (A.peek() + B.peek()) / 2.0;
+     }
+     ```
+
+## Q42. 连续子数组的最大和：**DP 动态规划**
+
+​	输入一个整型数组，数组中的一个或连续多个整数组成一个子数组。求所有子数组的和的最大值。要求时间复杂度为O(n)。
+
+```
+示例1:
+输入: nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出: 6
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+```
+
+解：
+
+1. **DP 动态规划 O(N) O(1)；**
+
+   - ```java
+     /**
+      * DP：转移方程 dp[i - 1] > 0 执行 dp[i] = dp[i - 1] + nums[i]、dp[i - 1] <= 0 执行 dp[i] = nums[i]
+      * @author 网友
+      * @param nums 数组
+      * @return 连续子数组最大和
+      * @time O(N)
+      * @space O(1)
+      */
+     public int maxSubArray(int[] nums) {
+         int maxSum = nums[0];
+         for (int i = 1; i < nums.length; i++) {
+             nums[i] += Math.max(nums[i - 1], 0);
+             maxSum = Math.max(maxSum, nums[i]);
+         }
+         return maxSum;
+     }
+     ```
+
+## Q43. 1 ～ n 整数中 1 出现的次数：优化暴力、**递归**、**找规律**
+
+​	输入一个整数 n ，求1～n这n个整数的十进制表示中1出现的次数。例如，输入12，1～12这些整数中包含1 的数字有1、10、11和12，1一共出现了5次。
+
+```
+示例 1：
+输入：n = 12
+输出：5
+
+示例 2：
+输入：n = 13
+输出：6
+```
+
+解：
+
+1. 优化暴力 O(N ^ 2) O(1)；
+
+   - ```java
+     /**
+      * 优化全暴力：利用 bitNum * Math.pow(10, bitNum - 1) 减少部分计算量，还是超时
+      * @author PAN
+      * @param n 整数
+      * @return 含 1 的个数
+      * @time O(N ^ 2)
+      * @space O(1)
+      */
+     public int countDigitOne(int n) {
+         int count = 0, bitNum = 0, num = n;
+         while (num != 0) {
+             num /= 10;
+             bitNum++;
+         }
+         bitNum--;
+         count = (int) (bitNum * Math.pow(10, bitNum - 1));
+         int i = (int) Math.pow(10, bitNum);
+         for ( ; i <= n; i++) {
+             String s = String.valueOf(i);
+             if (s.contains("1"))
+                 for (int j = 0; j < s.length(); j++)
+                     if (s.charAt(j) == '1') count++;
+         }
+         return count;
+     }
+     ```
+
+2. **递归 O(log N) O(log N)；**
+
+   - ```java
+     /**
+      * 递归：在利用 bitNum * Math.pow(10, bitNum - 1) 的基础上，对剩余的数再递归
+      * @author 网友
+      * @param n 整数
+      * @return 含 1 的个数
+      * @time O(log N)
+      * @space O(log N)
+      */
+     public int countDigitOne2(int n) {
+         return f(n);
+     }
+     private int f(int n ) {
+         if (n <= 0)
+             return 0;
+         String s = String.valueOf(n);
+         int high = s.charAt(0) - '0';
+         int pow = (int) Math.pow(10, s.length()-1);
+         int last = n - high * pow;
+         if (high == 1) {
+             return f(pow-1) + last + 1 + f(last);
+         } else {
+             return pow + high * f(pow-1) + f(last);
+         }
+     }
+     ```
+
+3. **找规律 O(log N) O(1)；**
+
+   - ![统计1的个数](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/统计1的个数.png)
+
+   - ```java
+     /**
+      * 找规律
+      * @author 网友
+      * @param n 整数
+      * @return 含 1 的个数
+      * @time O(log N)
+      * @space O(1)
+      */
+     public int countDigitOne3(int n) {
+         int digit = 1, res = 0;
+         int high = n / 10, cur = n % 10, low = 0;
+         while(high != 0 || cur != 0) {
+             if(cur == 0) res += high * digit;
+             else if(cur == 1) res += high * digit + low + 1;
+             else res += (high + 1) * digit;
+             low += cur * digit;
+             cur = high % 10;
+             high /= 10;
+             digit *= 10;
+         }
+         return res;
+     }
+     ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
