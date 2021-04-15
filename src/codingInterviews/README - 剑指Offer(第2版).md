@@ -3525,19 +3525,138 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
      }
      ```
 
+## Q44. 数字序列中某一位的数字：找规律、暴力求解
 
+​	数字以0123456789101112131415…的格式序列化到一个字符序列中。在这个序列中，第5位（从下标0开始计数）是5，第13位是1，第19位是4，等等。请写一个函数，求任意第n位对应的数字。
 
+```
+示例 1：
+输入：n = 3
+输出：3
 
+示例 2：
+输入：n = 11
+输出：0
+```
 
+解：
 
+1. 找规律；
 
+   - ```java
+     /**
+      * 找规律：位数 = 1 + 9 * (10 ^ 0 * 1 + 10 ^ 1 * 2 + 10 ^ 2 * 3 + …… + 10 ^ (n - 1) * n)
+      * @author PAN
+      * @param n 第 n 位
+      * @return 第 n 位对应数字
+      * @time O(log N)
+      * @space O(log N)
+      */
+     public int findNthDigit(int n) {
+         long count = 1;
+         int oldCount = 1, bit = 0;
+         while (true) {
+             if (count > n) break;
+             oldCount = (int) count;
+             bit++;
+             count += 9 * Math.pow(10, bit - 1) * bit;
+         }
+         int sub = n - oldCount, num = (int)Math.pow(10, bit - 1) + sub / bit;
+         String s = String.valueOf(num);
+         return s.charAt(sub % bit) - '0';
+     }
+     ```
 
+2. 暴力求解；
 
+   - ```java
+     /**
+      * 暴力求解：超内存
+      * @author PAN
+      * @param n 第 n 位
+      * @return 第 n 位对应数字
+      */
+     public int findNthDigit2(int n) {
+         StringBuilder s = new StringBuilder();
+         int i = 0;
+         while (i >= 0) {
+             s.append(i);
+             i++;
+             if (s.length() > n) break;
+         }
+         return s.charAt(n) - '0';
+     }
+     ```
 
+## Q45. 把数组排成最小的数：**自定义函数/ lambda**
 
+​	输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
 
+```
+示例 1:
+输入: [10,2]
+输出: "102"
 
+示例 2:
+输入: [3,30,34,5,9]
+输出: "3033459"
+```
 
+解：
+
+1. 自定义函数/ lambda；
+
+   - ```java
+     /**
+      * 自定义排序：
+      * 若拼接字符串 x + y > y + x，则 x “大于” y ；反之，若 x + y < y + x，则 x “小于” y ；
+      * @author 网友
+      * @param nums 待排序数组
+      * @return 最小数
+      * @time O(N * log N)
+      * @space O(N)
+      */
+     public String minNumber(int[] nums) {
+         String[] str = new String[nums.length];
+         for (int i = 0; i < nums.length; i++)
+             str[i] = String.valueOf(nums[i]);
+         quickSort(str,0, str.length - 1);
+         StringBuilder stringBuilder = new StringBuilder();
+         for (String s : str)
+             stringBuilder.append(s);
+         return stringBuilder.toString();
+     }
+     public void quickSort(String[] str, int l, int r) {
+         if (l >= r) return;
+         int i = l, j = r;
+         String tmp = str[i];
+         while (i < j) {
+             while ((str[j] + str[l]).compareTo(str[l] + str[j]) >= 0 && i < j) j--;
+             while ((str[l] + str[i]).compareTo(str[i] + str[l]) >= 0 && i < j) i++;
+             tmp = str[i];
+             str[i] = str[j];
+             str[j] = tmp;
+         }
+         str[i] = str[l];
+         str[l] = tmp;
+         quickSort(str, l, i - 1);
+         quickSort(str, i + 1, r);
+     }
+     
+     /**
+      * lambda 内置函数写法
+      */
+     public String minNumber2(int[] nums) {
+         String[] strs = new String[nums.length];
+         for(int i = 0; i < nums.length; i++)
+             strs[i] = String.valueOf(nums[i]);
+         Arrays.sort(strs, (x, y) -> (x + y).compareTo(y + x));
+         StringBuilder res = new StringBuilder();
+         for(String s : strs)
+             res.append(s);
+         return res.toString();
+     }
+     ```
 
 
 
