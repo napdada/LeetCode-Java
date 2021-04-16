@@ -2,7 +2,7 @@
 [TOC]
  **注O(N) O(N)：先时间复杂度，再空间复杂度，全文如此。**
 
-## A1. 动态规划DP
+## A1. 动态规划 DP
 
 1. 状态定义
 2. 转移方程
@@ -3658,11 +3658,217 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
      }
      ```
 
+## Q46. 把数字翻译成字符串：递归、**类跳台阶 DP**、**求余优化 DP**
 
+​	给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
 
+```
+示例 1:
+输入: 12258
+输出: 5
+解释: 12258有5种不同的翻译，分别是"bccfi", "bwfi", "bczi", "mcfi"和"mzi"
+```
 
+解：
 
+1. 递归 O(N) O(N)；
 
+   - ```java
+     /**
+      * 递归：从左往右每次前进一位或两位
+      * @author PAN
+      * @param num 待翻译数字
+      * @return 翻译方法数
+      * @time O(N)
+      * @space O(N)
+      */
+     public int translateNum(int num) {
+         String s = String.valueOf(num);
+         recur(0, 1, s); // 前进一位
+         recur(0, 2, s); // 前进两位
+         return n;
+     }
+     public void recur(int i, int count, String s) {
+         // 终止条件
+         if (i + count == s.length()) {  // 前进结束
+             if (count == 2) {   // 当最后一个数为两位数时需要判断合法性（0 - 25），再决定是否增加方法数
+                 String tmpS = s.substring(i, i + 2);
+                 if (tmpS.charAt(0) == '0' || Integer.parseInt(tmpS) > 25) return;
+                 else n++;       // 当最后一个数为一位数时直接增加方法数
+             } else n++;
+             return;
+         } else if (i + count > s.length()) return;  // 长度溢出不合法
+     
+         // 递推工作
+         if (count == 1) {
+             recur(i + 1, 1, s);
+             recur(i + 1, 2, s);
+         } else {
+             String tmpS = s.substring(i, i + 2);
+             if (tmpS.charAt(0) == '0' || Integer.parseInt(tmpS) > 25) return;
+             else {
+                 recur(i + 2, 1, s);
+                 recur(i + 2, 2, s);
+             }
+         }
+     }
+     ```
 
+2. **类似青蛙跳台阶 DP O(N) O(N)；**
 
+   - ```java
+     /**
+      * 类似青蛙跳台阶 DP：dp[i] = dp[i + 1] + dp[i + 2] 或 dp[i + 1] ，从右往左和从左往右一样
+      * @author 网友
+      * @param num 待翻译数字
+      * @return 翻译方法数
+      * @time O(N)
+      * @space O(N)
+      */
+     public int translateNum2(int num) {
+         String s = String.valueOf(num);
+         int a = 1, b = 1;
+         for(int i = 2; i <= s.length(); i++) {
+             String tmp = s.substring(i - 2, i);
+             int c = tmp.compareTo("10") >= 0 && tmp.compareTo("25") <= 0 ? a + b : a;
+             b = a;
+             a = c;
+         }
+         return a;
+     }
+     ```
 
+3. **数字求余优化 DP O(N) O(1)；**
+
+   - ```java
+     /**
+      * 数字求余优化 DP
+      * @author 网友
+      * @param num 待翻译数字
+      * @return 翻译方法数
+      * @time O(N)
+      * @space O(1)
+      */
+     public int translateNum3(int num) {
+         int a = 1, b = 1, x, y = num % 10;	// a 记录 dp[i]，b 记录 dp[i - 1]
+         while(num != 0) {
+             num /= 10;
+             x = num % 10;
+             int tmp = 10 * x + y;
+             int c = (tmp >= 10 && tmp <= 25) ? a + b : a;
+             b = a;
+             a = c;
+             y = x;
+         }
+         return a;
+     }
+     ```
+
+## Q47. 礼物的最大价值：递归暴力求解、动态规划
+
+​	在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+
+```
+示例 1:
+输入: 
+[
+  [1,3,1],
+  [1,5,1],
+  [4,2,1]
+]
+输出: 12
+解释: 路径 1→3→5→2→1 可以拿到最多价值的礼物
+```
+
+解：
+
+1. 递归暴力求解 O(N * M * (N + M)) O(N + M)；
+
+   - ```java
+     /**
+      * 递归暴力求解：每个位置可以往右或往下
+      * @author PAN
+      * @param grid 收益矩阵
+      * @return 最大收益
+      * @time O(N * M * (N + M))，超时
+      * @space O(N + M)
+      */
+     public int maxValue(int[][] grid) {
+         recur(0, 0, grid);
+         return max;
+     }
+     public void recur(int x, int y, int[][] a) {
+         if (x == a.length && y == a[0].length) {
+             max = Math.max(max, num);
+             return;
+         }
+         num += a[x][y];
+         if (x == a.length - 1) {
+             for (int j = y + 1; j < a[0].length; j++)
+                 num += a[x][j];
+             max = Math.max(max, num);
+             return;
+         }
+         if (y == a[0].length - 1) {
+             for (int j = x + 1; j < a.length; j++)
+                 num += a[j][y];
+             max = Math.max(max, num);
+             return;
+         }
+         int tmp = num;
+         recur(x + 1, y, a);
+         num = tmp;
+         recur(x, y + 1, a);
+     }
+     ```
+
+2. **动态规划 O(N * M) O(1)；**
+
+   - ```java
+     /**
+      * 动态规划：
+      * 1. 初始化最上边行（从左累加到右）、最左边列（从上累加到下）；
+      * 2. grid[i][j] = max(grid[i - 1][j], grid[i][j - 1]) + grid[i][j]；
+      * @author 网友
+      * @param grid 收益矩阵
+      * @return 最大收益
+      * @time O(N * M)
+      * @space O(1)
+      */
+     public int maxValue2(int[][] grid) {
+         for (int i = 1; i < grid.length; i++)
+             grid[i][0] += grid[i - 1][0];
+         for (int i = 1; i < grid[0].length; i++)
+             grid[0][i] += grid[0][i - 1];
+         for (int i = 1; i < grid.length; i++)
+             for (int j = 1; j < grid[i].length; j++)
+                 grid[i][j] =  Math.max(grid[i - 1][j], grid[i][j - 1]) + grid[i][j];
+         return grid[grid.length - 1][grid[0].length - 1];
+     }
+     ```
+
+## Q48. 最长不含重复字符的子字符串
+
+​	请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+
+```
+示例 1:
+输入: "abcabcbb"
+输出: 3 
+解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+
+示例 2:
+输入: "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+
+示例 3:
+输入: "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+```
+
+解：
+
+1. 
