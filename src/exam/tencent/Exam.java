@@ -3,7 +3,7 @@ package exam.tencent;
 import java.util.ArrayList;
 
 /**
- * 腾讯笔试第一题：将树修剪成完全二叉树
+ * 腾讯第二场笔试第一题：将树修剪成完全二叉树
  */
 public class Exam {
     public static void main(String[] args) {

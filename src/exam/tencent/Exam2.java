@@ -3,7 +3,7 @@ package exam.tencent;
 import java.util.Scanner;
 
 /**
- * 腾讯笔试第二题：将数字串相邻两数之和为 10 的数字删除，删除后形成新串，最后输出无法再合并的长度
+ * 腾讯第二场笔试第二题：将数字串相邻两数之和为 10 的数字删除，删除后形成新串，最后输出无法再合并的长度
  */
 public class Exam2 {
     public static void main(String[] args) {

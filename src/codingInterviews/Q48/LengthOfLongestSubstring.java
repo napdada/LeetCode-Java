@@ -1,5 +1,6 @@
 package codingInterviews.Q48;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.jar.JarEntry;
 
@@ -34,7 +35,7 @@ public class LengthOfLongestSubstring {
      * @param s 字符串
      * @return 最大子串长度
      * @time O(N ^ 2)
-     * @space O(N)
+     * @space O(1)，字符 ASCII 码范围为 0 - 127，所以最多用 O(128) = O(1) 空间
      */
     public int lengthOfLongestSubstring(String s) {
         if (s.length() == 0) return 0;
@@ -56,5 +57,25 @@ public class LengthOfLongestSubstring {
             max = Math.max(max, set.size());
         }
         return max;
+    }
+
+    /**
+     * 动态规划：dp[j - 1] < j - i 时，dp[j] = dp[j - 1] + 1；dp[j - 1] >= j - i 时，dp[j] = j - i
+     * @author 网友
+     * @param s 字符串
+     * @return 最大子串长度
+     * @time O(N)
+     * @space O(1)
+     */
+    public int lengthOfLongestSubstring2(String s) {
+        HashMap<Character, Integer> dic = new HashMap<>();
+        int res = 0, tmp = 0;
+        for(int j = 0; j < s.length(); j++) {
+            int i = dic.getOrDefault(s.charAt(j), -1); // 获取索引 i
+            dic.put(s.charAt(j), j); // 更新哈希表
+            tmp = tmp < j - i ? tmp + 1 : j - i; // dp[j - 1] -> dp[j]
+            res = Math.max(res, tmp); // max(dp[j - 1], dp[j])
+        }
+        return res;
     }
 }
