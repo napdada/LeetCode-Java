@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * 腾讯音乐全民 K 歌一面第二题：找树最下层最左边节点
+ * 腾讯音乐全民 K 歌后端一面第二题：找树最下层最左边节点
  */
 public class FindBottomLeftValue {
 
