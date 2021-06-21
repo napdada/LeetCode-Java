@@ -78,7 +78,7 @@
 
 3. **原地交换** - 遍历中，第一次遇到数字 xx 时，将其交换至索引 xx 处，而当第二次遇到数字 xx 时，一定有 nums[x] = x，此时即可得到一组重复数字。
 
-   ![原地交换](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/原地交换.png)
+   ![原地交换](https://i.loli.net/2021/06/21/XE3cQivPIfa4o8p.png)
 
    - ```java
      /**
@@ -151,7 +151,7 @@
 
 2. **类二叉查找树 O(N + M)** - 将矩阵逆时针旋转 45° ，并将其转化为图形式，发现其类似于二叉搜索树，即对于每个元素，其左分支元素更小、右分支元素更大。从二维数组右上角元素开始与 target 比较，target 大则向下比较， target 小则向左比较。
 
-   ![类二叉搜索树](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/类二叉搜索树.png)
+   ![类二叉搜索树](https://i.loli.net/2021/06/21/z1W2V6fvEO8nMLg.png)
 
    - ```java
      /**
@@ -636,7 +636,7 @@
 
 1. **DFS + 剪枝 O(3^K*MN) O(K)**：
 
-   ![DFS+剪枝](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/DFS+剪枝.png)
+   ![DFS+剪枝](https://i.loli.net/2021/06/21/nDSmo9Evy3iHhsj.png)
 
    1）DFS暴力遍历矩阵中所有字符串可能性，通过递归先朝一个方向搜到底，再回溯至上个节点，沿另一个方向搜索，以此类推；
 
@@ -699,7 +699,7 @@
 
    - **数位和增量公式：不需要每次都用整除和求余去计算位数和**
 
-     ![数位和增量公式](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/数位和增量公式.png)
+     ![数位和增量公式](https://i.loli.net/2021/06/21/6USkNAflGB71qhL.png)
 
    - 可达解分析：**仅需向右、向下移动**
 
@@ -868,11 +868,11 @@
 
 2. **贪心**
 
-   - ![绳子切分贪心](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分贪心.png)
+   - ![绳子切分贪心](https://i.loli.net/2021/06/21/3NS4Irzo1n7LUEg.png)
 
 3. 动态规划 O(N^2) O(N)
 
-   - ![绳子切分动态规划](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分动态规划.png)
+   - ![绳子切分动态规划](https://i.loli.net/2021/06/21/I52tuZswK7DzdfH.png)
 
    - ```java
      class Solution {
@@ -938,7 +938,7 @@
 
 2. **快速求余 O(log2 N) O(1)**
 
-   - ![快速幂求余](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/快速幂求余.png)
+   - ![快速幂求余](https://i.loli.net/2021/06/21/Mi78RWIFVu14Has.png)
 
    - ```java
      class Solution {
@@ -1089,7 +1089,7 @@
 
 2. **二进制快速幂 O(log2 N) O(1)** - 利用十进制数字 n 的二进制表示，可对快速幂进行数学化解释。
 
-   ![二进制快速幂](/Users/panpan/Documents/Code/DevelopTips/图/算法/二进制快速幂.png)
+   ![二进制快速幂](https://i.loli.net/2021/06/21/5TfqQiBaHbOWMSF.png)
 
    - ```java
      /**
@@ -1121,7 +1121,7 @@
 
 3. **二分法快速幂 O(log2 N) O(1)** - 与上个方法类似
 
-   ![二分法快速幂](/Users/panpan/Documents/Code/DevelopTips/图/算法/二分法快速幂.png)
+   ![二分法快速幂](https://i.loli.net/2021/06/21/f5isl9jkLP6H2ep.png)
 
 ## Q17. 打印从1到最大的n位数：循环打印、**大数打印（递归）**
 
@@ -1159,13 +1159,13 @@
 
 2. 大数打印 O(10^N) O(10^N) - 题目给定了 int 范围，但实际情况可能会考大数，这时候用 int 无法解，需要用 String。
 
-   - ![大数递归打印](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/大数递归打印.png)
+   - ![大数递归打印](https://i.loli.net/2021/06/21/yZlNuIrEMBScR8p.png)
 
    - 主要处理两个问题：
 
      1. 删除高位多余的 0：
 
-        ![删除高位0](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/删除高位0.png)
+        ![删除高位0](https://i.loli.net/2021/06/21/Hyh67eNEsv92dk5.png)
 
      2. 列表从 1 开始：添加字符串前判断是否为“0”，是则跳过。
      
@@ -1302,9 +1302,9 @@ p = "mis*is*p*."
 1. **动态规划 O(NM) O(NM)**
    - 总体思路：每轮添加一个字符并判断是否能匹配，直至添加完整个字符串 s 和 p。
    
-   - ![正则表达式匹配](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/正则表达式匹配.png)
+   - ![正则表达式匹配](https://i.loli.net/2021/06/21/FAdrS1kwe5qM8uD.png)
    
-   - ![正则表达式匹配DP](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/正则表达式匹配DP.png)
+   - ![正则表达式匹配DP](https://i.loli.net/2021/06/21/Jm2zK6DVUlPecCw.png)
    
    - ```java
      /**
@@ -1375,7 +1375,7 @@ p = "mis*is*p*."
 
 2. **有限状态自动机 O(N) O(1)** 
 
-   - ![判断数字有限状态自动机](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/判断数字有限状态自动机.png)
+   - ![判断数字有限状态自动机](https://i.loli.net/2021/06/21/WCSs5wjamIUTkLt.png)
 
    - ```java
      class Solution {
@@ -2027,7 +2027,7 @@ p = "mis*is*p*."
 
 2. 递归 O(N) O(N)
 
-   - ![对称二叉树递归](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/对称二叉树递归.png)
+   - ![对称二叉树递归](https://i.loli.net/2021/06/21/GUvuj1rlLF6k3Yb.png)
 
    - ```java
      /**
@@ -2541,7 +2541,7 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
 
 2. 辅助单调栈 O(N) O(N)
 
-   - ![辅助单调栈](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/辅助单调栈.png)
+   - ![辅助单调栈](https://i.loli.net/2021/06/21/Kpek8lwM6FruEZD.png)
    
    - ```java
      /**
@@ -3082,7 +3082,7 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
 
 1. **回溯 O(N! * N) O(N ^ 2)：**
 
-   - ![字符串全排列](/Users/panpan/Documents/Code/DevelopTips/图/算法/字符串全排列.png)
+   - ![字符串全排列](https://i.loli.net/2021/06/21/3wYDj97yPnr2eKu.png)
 
    - ```java
      public class Permutation {
@@ -3503,7 +3503,7 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
 
 3. **找规律 O(log N) O(1)；**
 
-   - ![统计1的个数](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/统计1的个数.png)
+   - ![统计1的个数](https://i.loli.net/2021/06/21/v1mQhbSFgGWc93k.png)
 
    - ```java
      /**
@@ -4066,6 +4066,112 @@ s = ""
      }
      ```
 
+## Q51. 数组中的逆序对：**归并排序**、暴力求解
+
+​	在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。
+
+```
+输入: [7,5,6,4]
+输出: 5
+```
+
+1. 归并排序 O(N * log N) O(N)；
+
+   - <img src="https://i.loli.net/2021/06/21/whJb5XNyuZDmWvU.png" alt="image-20210621205631990" style="zoom:50%;" />
+
+   - ```java
+     int[] nums, tmp;
+     
+     /**
+      * 归并排序
+      * 分：不断将数组从中点位置划分开，将整个数组的排序问题转换为子数组的排序问题；
+      * 治：划分到子数组长度为 1 时，开始向上合并，不断将较短排序数组合并为较长排序数组，直至合并至愿数组完成排序；
+      * @author 网友
+      * @param nums 数组
+      * @return 逆序对数
+      * @time O(N * log N)
+      * @space O(N)
+      */
+     public int reversePairs(int[] nums) {
+         this.nums = nums;
+         tmp = new int[nums.length];
+         return mergeSort(0, nums.length - 1);
+     }
+     
+     // 递归
+     public int mergeSort(int l, int r) {
+         if (l >= r) return 0;
+         int mid = (l + r) / 2;
+         int count =  mergeSort(l, mid) + mergeSort(mid + 1, r);
+     
+         int i = l, j = mid + 1;
+         for (int k = l; k <= r; k++)
+             tmp[k] = nums[k];
+         for (int k = l; k <= r; k++) {
+             if (i == mid + 1)       // 左边结束
+                 nums[k] = tmp[j++];
+             else if (j == r + 1 || tmp[i] <= tmp[j])    // 右边结束 or 左边 < 右边
+                 nums[k] = tmp[i++];
+             else {                  // 左边 > 右边
+                 nums[k] = tmp[j++];
+                 count += mid - i + 1;   // 计算该次递归的逆序对
+             }
+         }
+         return count;
+     }
+     ```
+
+2. 暴力求解 O(N ^ 2) O(1)；
+
+   - ```java
+     /**
+      * 排序交换：比较相邻两数，前数大于后数则交换位置
+      * @author NAP
+      * @param nums 数组
+      * @return 逆序对数
+      * @time O(N ^ 2)
+      * @space O(1)
+      */
+     public int reversePairs2(int[] nums) {
+         int count = 0, len = nums.length;
+         if (len == 1) return 0;
+         for (int i = 0; i < len; i++) {
+             if (i == len - 1) {
+                 len--;
+                 i = 0;
+             }
+             if (nums[i] > nums[i + 1]) {
+                 swap(nums, i, i + 1);
+                 count++;
+             }
+         }
+         return count;
+     }
+     
+     public void swap(int[] nums, int i, int j) {
+         int tmp = nums[i];
+         nums[i] = nums[j];
+         nums[j] = tmp;
+     }
+     /**
+      * 暴力求解：比较每一个数字和其后所有数字，并计数
+      * @author NAP
+      * @param nums 数组
+      * @return 计数结果，即逆序对数
+      * @time O(N ^ 2)，超时
+      * @space O(1)
+      */
+     public int reversePairs3(int[] nums) {
+         int count = 0;
+         for (int i = 0; i < nums.length; i++) {
+             for (int j = i + 1; j < nums.length; j++) {
+                 if (nums[i] > nums[j]) count++;
+             }
+         }
+         return count;
+     }
+     ```
+
 ## Q52. 两个链表的第一个公共节点：哈希表、**双指针**
 
 ​	输入两个链表，找出它们的第一个公共节点。
@@ -4080,53 +4186,54 @@ s = ""
 
 1. HashSet 记录 O(N) O(N)；
 
-   ```java
-   /**
-    * HashSet 记录走过的节点，找出第一个重复走的
-    * @author PAN
-    * @param headA 链表1
-    * @param headB 链表2
-    * @return 第一个公共节点
-    * @time O(N)
-    * @space O(N)
-    */
-   public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-       HashSet<ListNode> set = new HashSet<>();
-       ListNode point1 = headA, point2 = headB;
-       while (point1 != null || point2 != null) {
-           if (point1 != null && !set.contains(point1)) {
-               set.add(point1);
-               point1 = point1.next;
-           } else if (point1 != null) return point1;
-           if (point2 != null && !set.contains(point2)) {
-               set.add(point2);
-               point2 = point2.next;
-           } else if (point2 != null) return point2;
-       }
-       return null;
-   }
-   ```
+   - ```java
+     /**
+      * HashSet 记录走过的节点，找出第一个重复走的
+      * @author PAN
+      * @param headA 链表1
+      * @param headB 链表2
+      * @return 第一个公共节点
+      * @time O(N)
+      * @space O(N)
+      */
+     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+         HashSet<ListNode> set = new HashSet<>();
+         ListNode point1 = headA, point2 = headB;
+         while (point1 != null || point2 != null) {
+             if (point1 != null && !set.contains(point1)) {
+                 set.add(point1);
+                 point1 = point1.next;
+             } else if (point1 != null) return point1;
+             if (point2 != null && !set.contains(point2)) {
+                 set.add(point2);
+                 point2 = point2.next;
+             } else if (point2 != null) return point2;
+         }
+         return null;
+     }
+     ```
 
 2. 双指针；
 
-   ```java
-   /**
-    * 双指针：因为 a + (b - c) = b + (a - c)，a：链表 1 节点数、b：链表 2 节点数、c：公共节点数
-    *       因此指针 1 遍历完链表 1 后指向链表 2 头节点，指针 2 遍历完链表 2 后指向链表 1 头节点，最后两个指针会在第一个公共节点相遇
-    * @author 网友
-    * @param headA 链表1
-    * @param headB 链表2
-    * @return 第一个公共节点
-    * @time O(N)
-    * @space O(1)
-    */
-   public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
-       ListNode A = headA, B = headB;
-       while (A != B) {
-           A = A != null ? A.next : headB;
-           B = B != null ? B.next : headA;
-       }
-       return A;
-   }
-   ```
+   - ```java
+     /**
+      * 双指针：因为 a + (b - c) = b + (a - c)，a：链表 1 节点数、b：链表 2 节点数、c：公共节点数
+      *       因此指针 1 遍历完链表 1 后指向链表 2 头节点，指针 2 遍历完链表 2 后指向链表 1 头节点，最后两个指针会在第一个公共节点相遇
+      * @author 网友
+      * @param headA 链表1
+      * @param headB 链表2
+      * @return 第一个公共节点
+      * @time O(N)
+      * @space O(1)
+      */
+     public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
+         ListNode A = headA, B = headB;
+         while (A != B) {
+             A = A != null ? A.next : headB;
+             B = B != null ? B.next : headA;
+         }
+         return A;
+     }
+     ```
 
+## 
