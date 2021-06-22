@@ -1,5 +1,15 @@
 package codingInterviews.Q53;
 
+/**
+ * Q53 - I. 在排序数组中查找数字：二分法、暴力求解
+ * 【题目】
+ *      统计一个数字在排序数组中出现的次数。
+ * 【示例】
+ *      输入: nums = [5,7,7,8,8,10], target = 8
+ *      输出: 2
+ *      输入: nums = [5,7,7,8,8,10], target = 6
+ *      输出: 0
+ */
 public class SearchNum {
 
     public static void main(String[] args) {
