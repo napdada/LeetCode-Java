@@ -837,7 +837,7 @@
 
    - 求导也可以证明，同时可以求得驻点为e，即2.7左右，通过带入2、3可以得到绳子越多切分成长度3，乘积越大；
 
-     ![绳子切分](/Users/panpan/Documents/Code/DevelopTips/图/LeetCode/《剑指Offer（第2版）》/绳子切分.png)
+     ![绳子切分](https://i.loli.net/2021/06/21/ZiUP7rXQ463oYSc.png)
 
    - 那么转换成以下算法：
 
@@ -1800,7 +1800,6 @@ p = "mis*is*p*."
 
 	 3
 	/ \
-
    4   5
   / \
  1   2
@@ -1845,22 +1844,20 @@ p = "mis*is*p*."
 
 ​	请完成一个函数，输入一个二叉树，该函数输出它的镜像。
 
-​	例如输入：
-
-​		 4
-
-​	   /   \
-​	  2     7
-​	 / \   / \
-​	1   3 6   9
+```
+例如输入：
+		4
+	  /   \
+	 2     7
+	/ \   / \
+   1   3 6   9
 镜像输出：
-
-​		 4
-
-​	   /   \
-​	  7     2
-​	 / \   / \
-​	9   6 3   1
+		 4
+	   /   \
+	  7     2
+	 / \   / \
+	9   6 3   1
+```
 
 ```
 示例 1：
@@ -4075,6 +4072,8 @@ s = ""
 输出: 5
 ```
 
+解：
+
 1. 归并排序 O(N * log N) O(N)；
 
    - <img src="https://i.loli.net/2021/06/21/whJb5XNyuZDmWvU.png" alt="image-20210621205631990" style="zoom:50%;" />
@@ -4236,4 +4235,60 @@ s = ""
      }
      ```
 
-## 
+## Q53. 在排序数组中查找数字 I：二分法、暴力求解
+
+统计一个数字在排序数组中出现的次数。
+
+```
+示例 1:
+输入: nums = [5,7,7,8,8,10], target = 8
+输出: 2
+
+示例 2:
+输入: nums = [5,7,7,8,8,10], target = 6
+输出: 0
+```
+
+解：
+
+1. 二分法 O(log N) O(1)；
+
+   - ```java
+     /**
+      * 二分法：先找到 target index，再从其左右分别开始计数
+      * @author NAP
+      * @param nums 数组
+      * @param target 目标数字
+      * @return 目标数字个数
+      * @time O(log N)
+      * @space O(1)
+      */
+     public int search(int[] nums, int target) {
+         if (nums == null || nums.length == 0) return 0;
+         int count = 0, index = -1;
+         int l = 0, r = nums.length - 1, m;
+         while (l <= r) {
+             m = (l + r) / 2;
+             if (nums[m] < target) l = m + 1;
+             else if (nums[m] > target) r = m - 1;
+             else {
+                 index = m;
+                 break;
+             }
+         }
+         if (index == -1) return 0;
+         int i = index;
+         while (i < nums.length && nums[i] == target) {
+             count++;
+             i++;
+         }
+         i = index - 1;
+         while (i >= 0 && nums[i] == target) {
+             count++;
+             i--;
+         }
+         return count;
+     }
+     ```
+
+2. 暴力求解 O(N ^ 2) O(1)；
